@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import TopNavBar from "./navBar/TopNavBar";
+import TopNavBar from "./nav-bar/TopNavBar";
 
 const MainContainer = () => {
     return (
