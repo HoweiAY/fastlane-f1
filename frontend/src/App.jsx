@@ -1,10 +1,17 @@
-import './App.css'
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import MainContainer from "./MainContainer";
 
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+    <div className="font-f1-r">
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainContainer/>}>
+
+        </Route>
+      </Routes>
+    </Router>
+    </div>
   )
 }
 

@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: "f1-r";
+        src: url("./fonts/Formula1-Regular.ttf") format("truetype");
+    }
+    @font-face {
+        font-family: "f1-b";
+        src: url("./fonts/Formula1-Bold.ttf") format("truetype");
+    }
+    @font-face {
+        font-family: "f1-bl";
+        src: url("./fonts/Formula1-Black.ttf") format("truetype");
+    }
+    @font-face {
+        font-family: "f1-w";
+        src: url("./fonts/Formula1-Wide.ttf") format("truetype");
+    }
+}
