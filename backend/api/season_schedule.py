@@ -6,20 +6,37 @@ import fastf1
 schedule_bp = Blueprint("schedule", __name__)
 
 @schedule_bp.route("/get_schedule", methods=["GET"])
-def getSeasonSchedule(year = 0):
-    if not year: 
+@schedule_bp.route("/get_schedule/<year>", methods=["GET"])
+def getSeasonSchedule(year=None):
+    if not year:
         year = datetime.now(timezone.utc).year
-    
-    schedule = { "events": [] }
+    year = int(year)
+
+    schedule = { "events": [], "error": False }
+    status = 200
 
     try:
         events = fastf1.get_event_schedule(year)
         roundNumber = events.RoundNumber.tolist()  # No. of rounds in the season
         countries = events.Country.tolist()  # names of the countries in which the event is held
         officialEventNames = events.OfficialEventName.tolist()  # official name of the Grand Prix
-
-        eventStartUTC = [[startDate.strftime("%B"), startDate.day] if not pd.isna(startDate) else [] for startDate in events.Session1DateUtc.tolist()]  # starting date of the test / race weekend
-        eventEndUTC = [[endDate.strftime("%B"), endDate.day] if not pd.isna(endDate) else [] for endDate in events.Session5DateUtc.tolist()]  # ending date of the test / race weekend
+        
+        eventStartUTC, eventEndUTC = [], []
+        for startDate, endDate in zip(events.Session1DateUtc.tolist(), events.Session5DateUtc.tolist()):
+            # starting date of the test / race weekend
+            if pd.isna(startDate): eventStartUTC.append({})
+            else:
+                eventStartUTC.append({
+                    "Month": startDate.strftime("%B"),
+                    "Day": startDate.day,
+                })
+            # ending date of the test / race weekend
+            if pd.isna(endDate): eventEndUTC.append({})
+            else:
+                eventEndUTC.append({
+                    "Month": endDate.strftime("%B"),
+                    "Day": endDate.day,
+                })
 
         for round, country, eventName, startDate, endDate in zip(roundNumber, countries, officialEventNames, eventStartUTC, eventEndUTC):
             event = {
@@ -28,14 +45,12 @@ def getSeasonSchedule(year = 0):
                 "eventName": eventName,
                 "startDate": startDate,
                 "endDate": endDate,
-                "error": False,
             }
             schedule["events"].append(event)
 
     except:
-        schedule.clear()
-
-        schedule["events"] = [{ "error": True }]
+        schedule["error"] = True
+        status = 400
 
     finally:
-        return jsonify(schedule)
+        return jsonify(schedule), status

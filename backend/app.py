@@ -6,7 +6,7 @@ from api.season_schedule import schedule_bp
 app = Flask(__name__)
 CORS(app)
 
-app.register_blueprint(schedule_bp, url_prefix="/get_schedule")
+app.register_blueprint(schedule_bp, url_prefix="/schedule")
 
 @app.route("/")
 def home():
