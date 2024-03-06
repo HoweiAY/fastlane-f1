@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom";
-import TopNavBar from "./nav-bar/TopNavBar";
+import TopNavBar from "./components/nav-bar/TopNavBar";
 
 const MainContainer = () => {
     return (
+        <>
+        <TopNavBar />
         <div>
-            <TopNavBar />
-            <div>
-                <Outlet />
-            </div>
+            <Outlet />
         </div>
+        </>
     );
 };
 

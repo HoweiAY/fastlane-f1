@@ -10,7 +10,8 @@ import Teams from "./pages/teams/Teams";
 
 const App = () => {
   return (
-    <div className="font-f1-r">
+    <div className="font-f1-r text-black">
+
     <Router>
       <Routes>
 
@@ -27,6 +28,7 @@ const App = () => {
 
       </Routes>
     </Router>
+    
     </div>
   );
 }
