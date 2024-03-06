@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 
-from .api.season_schedule import schedule_bp
+from api.season_schedule import schedule_bp
 
 app = Flask(__name__)
 CORS(app)

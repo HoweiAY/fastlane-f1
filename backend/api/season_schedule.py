@@ -34,7 +34,8 @@ def getSeasonSchedule(year = 0):
 
     except:
         schedule.clear()
-        schedule["events"].append({"error": True})
+
+        schedule["events"] = [{ "error": True }]
 
     finally:
         return jsonify(schedule)
