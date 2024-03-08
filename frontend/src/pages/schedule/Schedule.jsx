@@ -8,8 +8,8 @@ const Schedule = () => {
 
     const loadSchedule = async (year) => {
         const schedule = await getSchedule(year);
-        if (!schedule["error"]) {
-            setFullSchedule(schedule);
+        if (!schedule.error) {
+            setFullSchedule(schedule.events);
         }
     };
 
@@ -19,8 +19,9 @@ const Schedule = () => {
 
     return (
         <>
-        <div>
+        <div className="px-10">
             <h1 className="font-f1-b text-4xl text-center py-14 px-8">This is the heading of the Schedule page.</h1>
+            {fullSchedule && fullSchedule.map((event) => <p key={event.round}>{event.eventName}</p>)}
         </div>
         </>
     );

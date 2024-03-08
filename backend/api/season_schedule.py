@@ -20,6 +20,7 @@ def getSeasonSchedule(year=None):
         roundNumber = events.RoundNumber.tolist()  # No. of rounds in the season
         countries = events.Country.tolist()  # names of the countries in which the event is held
         officialEventNames = events.OfficialEventName.tolist()  # official name of the Grand Prix
+        formats = events.EventFormat.tolist()  # format of the race weekends
         
         eventStartUTC, eventEndUTC = [], []
         for startDate, endDate in zip(events.Session1DateUtc.tolist(), events.Session5DateUtc.tolist()):
@@ -27,22 +28,29 @@ def getSeasonSchedule(year=None):
             if pd.isna(startDate): eventStartUTC.append({})
             else:
                 eventStartUTC.append({
-                    "Month": startDate.strftime("%B"),
-                    "Day": startDate.day,
+                    "month": startDate.strftime("%B"),
+                    "day": startDate.day,
+                    "hour": startDate.hour,
+                    "minute": startDate.minute,
+                    "timeFormatted": startDate.to_pydatetime().isoformat(),
                 })
             # ending date of the test / race weekend
             if pd.isna(endDate): eventEndUTC.append({})
             else:
                 eventEndUTC.append({
-                    "Month": endDate.strftime("%B"),
-                    "Day": endDate.day,
+                    "month": endDate.strftime("%B"),
+                    "day": endDate.day,
+                    "hour": endDate.hour,
+                    "minute": endDate.minute,
+                    "timeFormatted": endDate.to_pydatetime().isoformat(),
                 })
 
-        for round, country, eventName, startDate, endDate in zip(roundNumber, countries, officialEventNames, eventStartUTC, eventEndUTC):
+        for round, country, eventName, format, startDate, endDate in zip(roundNumber, countries, officialEventNames, formats, eventStartUTC, eventEndUTC):
             event = {
                 "round": round,
                 "country": country,
                 "eventName": eventName,
+                "format": format,
                 "startDate": startDate,
                 "endDate": endDate,
             }

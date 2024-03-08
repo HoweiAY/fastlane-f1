@@ -18,7 +18,7 @@ const TopNavBar = () => {
 
     return (
         <>
-        <nav className="grid grid-flow-col grid-cols-10 items-center justify-around sticky h-15 w-full bg-red-600 text-lg text-white">
+        <nav className="grid grid-flow-col grid-cols-10 items-center justify-around sticky top-0 h-15 w-full bg-red-600 text-lg text-white">
             <div 
                 className="flex flex-shrink justify-center col-span-2 ps-20 min-w-40 overflow-x-visible hover:cursor-pointer" 
                 onClick={() => handlePageNavigation("/")}

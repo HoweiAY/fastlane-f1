@@ -6,9 +6,9 @@ const api = axios.create({
     baseURL: `${baseURL}`,
 });
 
-export const getSchedule = async (year) => {
+export const getEventInfo = async (year, round) => {
     try {
-        const response = await api.get(`schedule/get_schedule/${year}`);
+        const response = await api.get(`event/get_event_info/${year}/${round}`);
         if (response.status !== 200) {
             throw new Error(response.statusText);
         }
