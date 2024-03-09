@@ -18,19 +18,19 @@ const TopNavBar = () => {
 
     return (
         <>
-        <nav className="grid grid-flow-col grid-cols-10 items-center justify-around sticky top-0 h-15 w-full bg-red-600 text-lg text-white">
+        <nav className="flex flex-row max-lg:flex-col flex-shrink-0 justify-around items-center sticky max-lg:static top-0 h-20 max-lg:h-auto w-full px-10 max-lg:pt-2 bg-red-600 text-lg text-white">
             <div 
-                className="flex flex-shrink justify-center col-span-2 ps-20 min-w-40 overflow-x-visible hover:cursor-pointer" 
+                className="flex justify-start max-lg:justify-center items-center w-[30%] min-w-[20%] h-full lg:ps-10 hover:cursor-pointer py-5"
                 onClick={() => handlePageNavigation("/")}
             >
                 <p className="font-f1-b text-2xl">FastLane</p>
             </div>
             
-            <nav className="flex justify-start items-center col-start-4 col-span-6 h-full px-20 whitespace-nowrap overflow-x-auto">
+            <nav className="flex flex-row max-md:flex-col flex-auto justify-center w-[1fr] h-full lg:px-10 max-md:pb-5 lg:mx-10 whitespace-nowrap">
                 {pages.map((page, index) => (
                     <button 
                         key={index}
-                        className="flex-auto transition-colors duration-800 hover:bg-gray-900 py-5 px-4"
+                        className="flex-auto transition-colors duration-800 lg:hover:bg-gray-900 max-lg:hover:underline underline-offset-auto py-5 max-md:py-2 max-lg:pt-2 px-4"
                         onClick={() => handlePageNavigation(page.path)}
                     >
                         {page.name}
@@ -38,44 +38,6 @@ const TopNavBar = () => {
                 ))}
             </nav>
         </nav>
-
-        <style>
-            {`
-            @media (max-width: 640px) {
-                nav.grid {
-                    grid-template-columns: 1fr;
-                    padding-bottom: 1.25rem;
-                    position: static;
-                }
-
-                div.flex {
-                    grid-column: 1 / span 1;
-                    font-size: 2rem;
-                    padding: 1.5rem;
-                }
-
-                nav.flex {
-                    grid-column: 1 / span 1;
-                    display: grid;
-                    grid-auto-flow: row;
-                    grid-template-rows: repeat(${pages.length}, 1fr);
-                    justify-content: center;
-                }
-
-                nav.flex button {
-                    padding-top: 0.5rem;
-                    padding-bottom: 0.75rem;
-                }
-
-                nav.flex button:hover {
-                    background-color: transparent;
-                    text-decoration-line: underline;
-                    text-underline-offset: auto;
-                }
-
-            }
-            `}
-        </style>
         </>
     );
 };

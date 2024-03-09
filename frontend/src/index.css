@@ -19,4 +19,9 @@
         font-family: "f1-w";
         src: url("./fonts/Formula1-Wide.ttf") format("truetype");
     }
+
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
 }
