@@ -41,20 +41,23 @@ const EventCard = ({event}) => {
 
     return (
         <div 
-            className="col-span-1 h-72 shadow-md shadow-gray-200 rounded-lg mx-3 mb-6 hover:scale-105 hover:cursor-pointer transition-all duration-500 z-0"
+            className="col-span-1 h-full shadow-md shadow-gray-300 rounded-lg mx-3 hover:scale-105 hover:cursor-pointer transition-all duration-500 z-0"
             onClick={() => {}}
         >
-            <h2 className="mx-4 font-f1-w text-lg max-lg:text-base">{event.format !== "testing" ? `ROUND ${event.round}` : "Testing"}</h2>
-            <h3 className="mx-4">
-                {event.startDate.month} {event.startDate.day} {event.format !== "testing" && ` - ${event.endDate.month} ${event.endDate.day}`}
+            <h2 className="mx-4 font-f1-w text-lg max-lg:text-base">{event.format !== "testing" ? `ROUND ${event.round}` : "TESTING"}</h2>
+            <h3 className="mx-4 max-lg:text-sm text-gray-600">
+                {event.startDate.month.slice(0, 3)} {event.startDate.day} 
+                {event.format !== "testing" && ` - ${event.endDate.month.slice(0, 3)} ${event.endDate.day}`}
             </h3>
-            <div className="flex flex-row justify-center items-center h-[45%] border-t-4 border-e-4 border-solid border-gray-800 rounded-tr-lg pt-1 px-2 m-2">
-                <h3 className="w-[75%] text-sm whitespace-break-spaces">
-                    <span className="mb-1 font-f1-b">{`${event.country}\n`}</span>
+            <div className="flex flex-row justify-around items-start h-32 border-t-4 border-e-4 border-solid border-gray-800 rounded-tr-lg pt-1 px-2 m-2 overflow-hidden">
+                <h3 className="w-[75%] text-sm whitespace-break-spaces text-ellipsis">
+                    <span className="font-f1-b">{`${event.country}\n`}</span>
                     {event.eventName}
                 </h3>
-                <img className="w-[25%] h-fit border rounded-md" src={`../../../node_modules/flag-icons/flags/4x3/${countryCode}.svg`}/>
+                <img className="self-center w-[25%] h-fit border rounded-md" src={`../../../node_modules/flag-icons/flags/4x3/${countryCode}.svg`} alt={`${event.country} flag`}/>
             </div>
+            <div className="flex justify-center border border-solid rounded-md mx-2 mt-1 mb-2">---</div>
+            
         </div>
     )
 };
