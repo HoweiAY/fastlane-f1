@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import EventCard from "../../components/event/EventCard";
+
 import { getSchedule } from "../../api/season_schedule";
 
 const Schedule = () => {
@@ -19,9 +21,16 @@ const Schedule = () => {
 
     return (
         <>
-        <div className="px-10">
-            <h1 className="font-f1-b text-4xl text-center py-14 px-8">This is the heading of the Schedule page.</h1>
-            {fullSchedule && fullSchedule.map((event) => <p key={event.round}>{event.eventName}</p>)}
+        <div>
+            <h1 className="font-f1-b text-4xl text-center py-14 px-8">Full FORMULA 1 Schedule {season}</h1>
+            <div className="flex flex-row justify-around">
+                <div className="justify-end w-[30%] text-right">left</div>
+                <div className="grid grid-cols-3 max-md:grid-cols-1 max-lg:grid-cols-2 items-stretch w-[1fr] mx-10">
+                    {fullSchedule && fullSchedule.map((event) => <EventCard event={event}/>)}
+                </div>
+                <div className="justify-start w-[30%]">right</div>
+            </div>
+            
         </div>
         </>
     );
