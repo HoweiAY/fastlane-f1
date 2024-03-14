@@ -4,6 +4,7 @@ import { countryCodes } from "../../utils/country_code";
 
 const EventCard = ({event}) => {
     const [countryCode, setCountryCode] = useState("xx");
+    const [circuitImgSrc, setCircuitImgSrc] = useState(null);
     
     useEffect(() => {
         setCountryCode(countryCodes[event.country]?.toLowerCase() || "xx");
@@ -20,6 +21,19 @@ const EventCard = ({event}) => {
             default: break;
         }
     }, [event]);
+
+    useEffect(() => {
+        const getCircuitImg = async (circuitName) => {
+            const path = `../../assets/images/circuits/${circuitName.replace(/ /g, '_').toLowerCase()}.png`;
+            try {
+                const module = await import(/* @vite-ignore */path);
+                setCircuitImgSrc(module.default);
+            } catch (error) {
+                console.error("Error loading circuit image");
+            }
+        };
+        getCircuitImg(event.location);
+    }, [event])
 
     return (
         <div 
@@ -46,7 +60,14 @@ const EventCard = ({event}) => {
                 />
             </div>
 
-            <div className="flex justify-center border border-solid rounded-md mx-2 mt-1 mb-2">---</div>
+            <div 
+                className="flex justify-center border border-solid border-red-600 rounded-md mx-4 mt-1 mb-4 bg-white"
+                style={{
+                    background: 'repeating-linear-gradient(45deg, #FFF, #FFF 8px, #AAA 6px, #AAA 10px)',
+                }}
+            >
+                <img className="w-[65%] h-fit" src={circuitImgSrc} alt={`${event.location} circuit map`} />
+            </div>
             
         </div>
     )
