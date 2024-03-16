@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 
 import { countryCodes } from "../../utils/country_code";
 
-const EventCard = ({event}) => {
+const EventCard = ({event, onClick}) => {
     const [countryCode, setCountryCode] = useState("xx");
-    const [circuitImgSrc, setCircuitImgSrc] = useState(null);
+    const [circuitImgSrc, setCircuitImgSrc] = useState("");
     
     useEffect(() => {
         setCountryCode(countryCodes[event.country]?.toLowerCase() || "xx");
@@ -30,6 +30,7 @@ const EventCard = ({event}) => {
                 setCircuitImgSrc(module.default);
             } catch (error) {
                 console.error("Error loading circuit image");
+                setCircuitImgSrc("");
             }
         };
         getCircuitImg(event.location);
@@ -38,7 +39,7 @@ const EventCard = ({event}) => {
     return (
         <div 
             className="col-span-1 min-w-52 max-lg:min-w-48 h-full border shadow-md shadow-gray-300 rounded-lg mx-3 bg-gray-50 hover:scale-105 hover:cursor-pointer transition-all duration-500 z-0"
-            onClick={() => {}}
+            onClick={() => onClick(event)}
         >
             <h2 className="mx-4 mt-2 font-f1-w text-base whitespace-nowrap overflow-hidden">
                 {event.format !== "testing" ? `ROUND ${event.round}` : "TESTING"}

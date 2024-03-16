@@ -7,6 +7,7 @@ import Schedule from "./pages/schedule/Schedule";
 import Results from "./pages/results/Results";
 import Drivers from "./pages/drivers/Drivers";
 import Teams from "./pages/teams/Teams";
+import Event from "./pages/event/Event";
 
 const App = () => {
   return (
@@ -23,6 +24,8 @@ const App = () => {
           <Route path="results" element={<Results/>} />
           <Route path="drivers" element={<Drivers/>} />
           <Route path="teams" element={<Teams/>} />
+
+          <Route path="event/:season/:location" element={<Event/>} />
 
         </Route>
 

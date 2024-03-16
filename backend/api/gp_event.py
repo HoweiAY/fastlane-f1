@@ -6,27 +6,30 @@ import fastf1
 
 event_bp = Blueprint("event", __name__)
 
-def sessionInfo(session):
-    sessionDate = session.date
-    sessionInfo = {}
-    if not pd.isna(sessionDate):
-        sessionInfo = {
-            "month": sessionDate.strftime("%B"),
-            "day": sessionDate.day,
-            "hour": sessionDate.hour,
-            "minute": sessionDate.minute,
-            "timeFormatted": sessionDate.to_pydatetime().isoformat(),
-        }
-    return sessionInfo
-
 
 @event_bp.route("/get_event_info", methods=["GET"])
 @event_bp.route("/get_event_info/<year>", methods=["GET"])
 @event_bp.route("/get_event_info/<year>/<round>", methods=["GET"])
 def getEventInfo(year=None, round=0):
+
+    def sessionInfo(session):
+        sessionDate = session.date
+        sessionInfo = {}
+        if not pd.isna(sessionDate):
+            sessionInfo = {
+                "month": sessionDate.strftime("%B"),
+                "day": sessionDate.day,
+                "hour": sessionDate.hour,
+                "minute": sessionDate.minute,
+                "timeFormatted": sessionDate.to_pydatetime().isoformat(),
+            }
+        return sessionInfo
+
     if not year:
         year = datetime.now(timezone.utc).year
     year = int(year)
+
+    round = int(round)
 
     gpEvent = {
         "eventName": "",
