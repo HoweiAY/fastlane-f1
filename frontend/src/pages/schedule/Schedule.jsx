@@ -14,14 +14,13 @@ const Schedule = () => {
     const [season, setSeason] = useState(currentYear);
     const [fullSchedule, setFullSchedule] = useState(null);
 
-    const loadSchedule = async (year) => {
-        const schedule = await getSchedule(year);
-        if (!schedule.error) {
-            setFullSchedule(schedule.events);
-        }
-    };
-
     useEffect(() => {
+        const loadSchedule = async (year) => {
+            const schedule = await getSchedule(year);
+            if (!schedule.error) {
+                setFullSchedule(schedule.events);
+            }
+        };
         loadSchedule(season);
     }, [season]);
 
@@ -30,8 +29,9 @@ const Schedule = () => {
     };
 
     const handleSelectEvent = (event) => {
+        const round = event.round;
         const location = event.location.replace(/ /g, '_');
-        navigate(`/event/${season}/${location}`, { state: { eventRound: event.round } });
+        navigate(`/event/${season}/${round}/${location}`);
     }
 
     return (

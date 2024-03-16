@@ -64,7 +64,7 @@ const EventCard = ({event, onClick}) => {
             <div 
                 className="flex justify-center border border-solid border-red-600 rounded-md mx-4 mt-1 mb-4 bg-white"
                 style={{
-                    background: 'repeating-linear-gradient(45deg, #FFF, #FFF 8px, #AAA 6px, #AAA 10px)',
+                    background: "repeating-linear-gradient(45deg, #FFF, #FFF 8px, #AAA 6px, #AAA 10px)",
                 }}
             >
                 <img className="w-[65%] h-fit" src={circuitImgSrc} alt={`${event.location} circuit map`} />

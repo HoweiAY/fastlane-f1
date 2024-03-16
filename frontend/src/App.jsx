@@ -25,7 +25,7 @@ const App = () => {
           <Route path="drivers" element={<Drivers/>} />
           <Route path="teams" element={<Teams/>} />
 
-          <Route path="event/:season/:location" element={<Event/>} />
+          <Route path="event/:season/:round/:location" element={<Event/>} />
 
         </Route>
 

@@ -34,6 +34,7 @@ def getEventInfo(year=None, round=0):
     gpEvent = {
         "eventName": "",
         "country": "",
+        "location": "",
         "circuitInfo": {},
         "sessions": {},
         "format": "",
@@ -58,6 +59,7 @@ def getEventInfo(year=None, round=0):
 
         gpEvent["eventName"] = event.OfficialEventName
         gpEvent["country"] = event.Country
+        gpEvent["location"] = event.Location
         gpEvent["format"] = event.EventFormat
 
         if not event.is_testing():

@@ -4,7 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { getEventInfo } from "../../api/gp_event";
 
 
-const fakeData = {
+const sampleData = {
     "circuitInfo": {
       "Location": {
         "country": "Saudi Arabia",
@@ -20,6 +20,7 @@ const fakeData = {
     "error": false,
     "eventName": "FORMULA 1 STC SAUDI ARABIAN GRAND PRIX 2024",
     "format": "conventional",
+    "location": "Jeddah",
     "sessions": {
       "practice1": {
         "day": 7,
@@ -62,13 +63,13 @@ const fakeData = {
     }
   }
 
-const Session = ({session, sessionName}) => {
+const SessionItem = ({session, sessionName}) => {
   return (
       <li 
       key={`${sessionName}`}
       className="flex flex-row justify-start items-center rounded-md p-4 my-1 bg-gray-50"
       >
-          <div className="w-40 max-md:w-28 border-e-2 border-red-600 pe-4 me-8">
+          <div className="w-52 max-md:w-36 border-e-2 border-red-600 pe-4 me-8">
               <h3 className=" font-f1-b text-2xl max-md:text-base">
                   {session.month} {session.day}
               </h3>
@@ -85,22 +86,35 @@ const Session = ({session, sessionName}) => {
 };
 
 const Event = () => {
-    let location = useLocation();
-    let { season } = useParams();
+    const { season, round } = useParams();
 
     const [event, setEvent] = useState(null);
-
-    const loadEvent = async (year, round) => {
-        const event = await getEventInfo(year, round);
-        if (!event.error) {
-            setEvent(event);
-        }
-    };
+    const [eventBannerSrc, setEventBannerSrc] = useState("");
 
     useEffect(() => {
-        const { eventRound } = location.state;
+        const eventRound = round;
+        const loadEvent = async (year, round) => {
+            const event = await getEventInfo(year, round);
+            if (!event.error) {
+                setEvent(event);
+            }
+        };
         loadEvent(Number(season), eventRound);
-    }, [location]);
+    }, [season, round]);
+
+    useEffect(() => {
+        const getEventBanner = async (eventLocation) => {
+            const path = `../../assets/images/events/${eventLocation?.replace(/ /g, '_').toLowerCase()}.png`;
+            try {
+                const module = await import(/* @vite-ignore */path);
+                setEventBannerSrc(module.default);
+            } catch (error) {
+                console.error("Error loading image");
+                setEventBannerSrc("");
+            }
+        };
+        getEventBanner(event?.location);
+    }, [event]);
 
     return ( 
         event ? 
@@ -108,7 +122,7 @@ const Event = () => {
             <header 
                 className="w-full h-96 bg-cover bg-center bg-no-repeat"
                 style={{
-                    'backgroundImage': "url(https://media.formula1.com/image/upload/f_auto/q_auto/v1677245021/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Saudi_Arabia.jpg.transform/fullbleed-retina/image.jpg)"
+                    'backgroundImage': `url(${eventBannerSrc})`
                 }}
             >
                 <div className="flex flex-col justify-center items-center w-full h-full bg-black bg-opacity-50 text-center">
@@ -118,8 +132,9 @@ const Event = () => {
                     </h1>
                     <h3 className="w-fit rounded-lg px-2 py-1 max-lg:px-3 mt-2 bg-gray-800 text-base max-lg:text-sm text-white">
                         {event.sessions.testing && `${event.sessions.testing.month} ${event.sessions.testing.day}`}
-                        {event.format !== "testing" && `${event.sessions.practice1.month} ${event.sessions.practice1.day}
-                            - ${event.sessions.race.month} ${event.sessions.race.day}`}
+                        {event.format !== "testing" 
+                            && `${event.sessions.practice1.month} ${event.sessions.practice1.day} - ${event.sessions.race.month} ${event.sessions.race.day}`
+                        }
                     </h3>
                 </div>
             </header>
@@ -133,30 +148,30 @@ const Event = () => {
                 </header>
 
                 <section className="flex flex-row max-lg:flex-col justify-start items-start mx-[10%] my-4 max-md:mx-10">
-                    <ul className="border-t-[15px] border-e-[15px] rounded-tr-3xl border-red-600 w-[60%] max-lg:w-full min-w-[480px] max-md:min-w-[300px] pe-10 pt-6 me-10">
-                        {event.sessions.testing && <Session session={event.sessions.testing} sessionName={"Testing"} />}
+                    <ul className="border-t-[15px] border-e-[15px] rounded-tr-3xl border-red-600 w-[70%] max-lg:w-full min-w-[480px] max-md:min-w-[300px] pe-10 pt-6 me-10">
+                        {event.sessions.testing && <SessionItem session={event.sessions.testing} sessionName={"Testing"} />}
                         
-                        {event.sessions.practice1 && <Session session={event.sessions.practice1} sessionName={"Practice 1"} />}
-                        {event.sessions.qualifying && event.format === "sprint" && <Session session={event.sessions.qualifying} sessionName={"Qualifying"} />}
-                        {event.sessions.practice2 && <Session session={event.sessions.practice2} sessionName={"Practice 2"} />}
-                        {event.sessions.practice3 && <Session session={event.sessions.practice3} sessionName={"Practice 3"} />}
+                        {event.sessions.practice1 && <SessionItem session={event.sessions.practice1} sessionName={"Practice 1"} />}
+                        {event.sessions.qualifying && event.format === "sprint" && <SessionItem session={event.sessions.qualifying} sessionName={"Qualifying"} />}
+                        {event.sessions.practice2 && <SessionItem session={event.sessions.practice2} sessionName={"Practice 2"} />}
+                        {event.sessions.practice3 && <SessionItem session={event.sessions.practice3} sessionName={"Practice 3"} />}
 
                         {event.sessions.qualifying 
                             && event.format !== "sprint" 
                             && season <= 2023 
-                            && <Session session={event.sessions.qualifying} sessionName={"Qualifying"} />
+                            && <SessionItem session={event.sessions.qualifying} sessionName={"Qualifying"} />
                         }
 
-                        {event.sessions.sprintShootout && <Session session={event.sessions.sprintShootout} sessionName={"Sprint Shootout"} />}
-                        {event.sessions.sprint && <Session session={event.sessions.sprint} sessionName={"Sprint"} />}
+                        {event.sessions.sprintShootout && <SessionItem session={event.sessions.sprintShootout} sessionName={"Sprint Shootout"} />}
+                        {event.sessions.sprint && <SessionItem session={event.sessions.sprint} sessionName={"Sprint"} />}
                         
                         {event.sessions.qualifying 
                             && event.format !== "sprint" 
                             && season > 2023 
-                            && <Session session={event.sessions.qualifying} sessionName={"Qualifying"} />
+                            && <SessionItem session={event.sessions.qualifying} sessionName={"Qualifying"} />
                         }
 
-                        {event.sessions.race && <Session session={event.sessions.race} sessionName={"Race"} />}
+                        {event.sessions.race && <SessionItem session={event.sessions.race} sessionName={"Race"} />}
                         <p className="pt-2 pb-4 me-20 max-md:me-10 text-xs text-gray-500">* All event dates are in UTC standard time (UTC+00:00).</p>
                     </ul>
                     <div className=" max-lg:hidden mt-6 mx-16"></div>
