@@ -10,7 +10,7 @@ event_bp = Blueprint("event", __name__)
 @event_bp.route("/get_event_info", methods=["GET"])
 @event_bp.route("/get_event_info/<year>", methods=["GET"])
 @event_bp.route("/get_event_info/<year>/<round>", methods=["GET"])
-def getEventInfo(year=None, round=0):
+def getEventInfo(year=None, round=1):
 
     def sessionInfo(session):
         sessionDate = session.date

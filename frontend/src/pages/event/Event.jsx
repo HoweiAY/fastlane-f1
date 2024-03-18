@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
+import SessionSchedule from "../../components/event/SessionSchedule";
+import CircuitInfo from "../../components/circuit/CircuitInfo";
 
 import { getEventInfo } from "../../api/gp_event";
 
@@ -63,33 +66,12 @@ const sampleData = {
     }
   }
 
-const SessionItem = ({session, sessionName}) => {
-  return (
-      <li 
-      key={`${sessionName}`}
-      className="flex flex-row justify-start items-center rounded-md p-4 my-1 bg-gray-50"
-      >
-          <div className="w-52 max-md:w-36 border-e-2 border-red-600 pe-4 me-8">
-              <h3 className=" font-f1-b text-2xl max-md:text-base">
-                  {session.month} {session.day}
-              </h3>
-              <h3 className="text-base max-md:text-sm">{sessionName}</h3>
-          </div>
-          <div className="text-base max-md:text-sm">
-              <h3>
-                  {session.hour}:{session.minute === 0 ? "00" : session.minute} 
-                  {sessionName !== "Race" && ` - ${session.hour + 1}:${session.minute === 0 ? "00" : session.minute}`}
-              </h3>
-          </div>
-      </li>
-  )
-};
-
 const Event = () => {
     const { season, round } = useParams();
 
     const [event, setEvent] = useState(null);
     const [eventBannerSrc, setEventBannerSrc] = useState("");
+    const [circuitImgSrc, setCircuitImgSrc] = useState("");
 
     useEffect(() => {
         const eventRound = round;
@@ -113,14 +95,25 @@ const Event = () => {
                 setEventBannerSrc("");
             }
         };
+        const getCircuitImg = async (circuitName) => {
+            const path = `../../assets/images/circuits/${circuitName?.replace(/ /g, '_').toLowerCase()}_detail.png`;
+            try {
+                const module = await import(/* @vite-ignore */path);
+                setCircuitImgSrc(module.default);
+            } catch (error) {
+                console.error("Error loading image");
+                setCircuitImgSrc("");
+            }
+        };
         getEventBanner(event?.location);
+        getCircuitImg(event?.location);
     }, [event]);
 
     return ( 
         event ? 
-        <main className="mb-10">
+        <main className="lg:mb-10">
             <header 
-                className="w-full h-96 bg-cover bg-center bg-no-repeat"
+                className="w-full h-96 max-md:h-80 bg-cover bg-center bg-no-repeat"
                 style={{
                     'backgroundImage': `url(${eventBannerSrc})`
                 }}
@@ -148,37 +141,41 @@ const Event = () => {
                 </header>
 
                 <section className="flex flex-row max-lg:flex-col justify-start items-start mx-[10%] my-4 max-md:mx-10">
-                    <ul className="border-t-[15px] border-e-[15px] rounded-tr-3xl border-red-600 w-[70%] max-lg:w-full min-w-[480px] max-md:min-w-[300px] pe-10 pt-6 me-10">
-                        {event.sessions.testing && <SessionItem session={event.sessions.testing} sessionName={"Testing"} />}
+                    <ul className="border-t-[15px] border-e-[15px] rounded-tr-3xl border-red-600 w-[100vw] max-lg:w-full min-w-[340px] max-md:min-w-[300px] pe-10 pt-6 me-10">
+                        {event.sessions.testing && <SessionSchedule session={event.sessions.testing} sessionName={"Testing"} />}
                         
-                        {event.sessions.practice1 && <SessionItem session={event.sessions.practice1} sessionName={"Practice 1"} />}
-                        {event.sessions.qualifying && event.format === "sprint" && <SessionItem session={event.sessions.qualifying} sessionName={"Qualifying"} />}
-                        {event.sessions.practice2 && <SessionItem session={event.sessions.practice2} sessionName={"Practice 2"} />}
-                        {event.sessions.practice3 && <SessionItem session={event.sessions.practice3} sessionName={"Practice 3"} />}
+                        {event.sessions.practice1 && <SessionSchedule session={event.sessions.practice1} sessionName={"Practice 1"} />}
+                        {event.sessions.qualifying && event.format === "sprint" && <SessionSchedule session={event.sessions.qualifying} sessionName={"Qualifying"} />}
+                        {event.sessions.practice2 && <SessionSchedule session={event.sessions.practice2} sessionName={"Practice 2"} />}
+                        {event.sessions.practice3 && <SessionSchedule session={event.sessions.practice3} sessionName={"Practice 3"} />}
 
                         {event.sessions.qualifying 
                             && event.format !== "sprint" 
                             && season <= 2023 
-                            && <SessionItem session={event.sessions.qualifying} sessionName={"Qualifying"} />
+                            && <SessionSchedule session={event.sessions.qualifying} sessionName={"Qualifying"} />
                         }
 
-                        {event.sessions.sprintShootout && <SessionItem session={event.sessions.sprintShootout} sessionName={"Sprint Shootout"} />}
-                        {event.sessions.sprint && <SessionItem session={event.sessions.sprint} sessionName={"Sprint"} />}
+                        {event.sessions.sprintShootout && <SessionSchedule session={event.sessions.sprintShootout} sessionName={"Sprint Shootout"} />}
+                        {event.sessions.sprint && <SessionSchedule session={event.sessions.sprint} sessionName={"Sprint"} />}
                         
                         {event.sessions.qualifying 
                             && event.format !== "sprint" 
                             && season > 2023 
-                            && <SessionItem session={event.sessions.qualifying} sessionName={"Qualifying"} />
+                            && <SessionSchedule session={event.sessions.qualifying} sessionName={"Qualifying"} />
                         }
 
-                        {event.sessions.race && <SessionItem session={event.sessions.race} sessionName={"Race"} />}
+                        {event.sessions.race && <SessionSchedule session={event.sessions.race} sessionName={"Race"} />}
                         <p className="pt-2 pb-4 me-20 max-md:me-10 text-xs text-gray-500">* All event dates are in UTC standard time (UTC+00:00).</p>
                     </ul>
-                    <div className=" max-lg:hidden mt-6 mx-16"></div>
+                    <div className="max-lg:hidden flex w-full ms-8 me-2">
+                        <CircuitInfo circuitInfo={event.circuitInfo} circuitImgSrc={circuitImgSrc} />
+                    </div>
                 </section>
             </div>
 
-            <div className="lg:hidden"></div>
+            <div className="lg:hidden flex flex-row justify-center items-center px-5 pb-5 bg-gray-100">
+                <CircuitInfo circuitInfo={event.circuitInfo} circuitImgSrc={circuitImgSrc} />
+            </div>
         </main> 
         : 
         <div className="text-center text-6xl">Loading</div>
