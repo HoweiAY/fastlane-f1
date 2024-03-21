@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import EventCard from "../../components/event/EventCard";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 import { getSchedule } from "../../api/season_schedule";
 
@@ -16,6 +17,7 @@ const Schedule = () => {
 
     useEffect(() => {
         const loadSchedule = async (year) => {
+            setFullSchedule(null);
             const schedule = await getSchedule(year);
             if (!schedule.error) {
                 setFullSchedule(schedule.events);
@@ -58,15 +60,21 @@ const Schedule = () => {
                     </ul>
                 </aside>
 
-                <div className=" max-md:self-center grid grid-cols-3 max-md:grid-cols-1 max-lg:grid-cols-2 items-stretch gap-5 w-[70%] max-md:w-[65%] min-w-80 ms-4 me-[10%] max-md:mx-20 max-lg:me-24">
-                    {fullSchedule && fullSchedule.map((event) => 
-                        <EventCard 
-                            key={event.dateFormatted}
-                            event={event} 
-                            onClick={(event) => handleSelectEvent(event)} 
-                        />
-                    )}
-                </div>
+                {!fullSchedule ? (
+                    <div className="max-md:self-center flex flex-row justify-center items-center w-[70%] h-100 max-md:w-[65%] min-w-80 ms-4 me-[10%] max-lg:mt-4">
+                        <LoadingSpinner width={"100"} height={"100"} color={"#DC2626"} />
+                    </div>
+                ) : (
+                    <div className="max-md:self-center grid grid-cols-3 max-md:grid-cols-1 max-lg:grid-cols-2 items-stretch gap-5 w-[70%] max-md:w-[65%] min-w-80 ms-4 me-[10%] max-md:mx-20 max-lg:me-24">
+                        {fullSchedule.map((event) => 
+                            <EventCard 
+                                key={event.dateFormatted}
+                                event={event} 
+                                onClick={(event) => handleSelectEvent(event)} 
+                            />
+                        )}
+                    </div>
+                )}
             </div>
         </main>
     );
