@@ -12,7 +12,7 @@ const Schedule = () => {
     const currentYear = new Date().getUTCFullYear();
     const seasons = Array.from({ length: currentYear - 2018 + 1 }, (_, index) => 2018 + index).reverse();
 
-    const [season, setSeason] = useState(currentYear);
+    const [season, setSeason] = useState(new Date().getUTCFullYear());
     const [fullSchedule, setFullSchedule] = useState(null);
 
     useEffect(() => {

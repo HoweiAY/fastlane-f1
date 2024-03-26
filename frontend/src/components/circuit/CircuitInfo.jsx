@@ -10,15 +10,15 @@ const CircuitInfo = ({circuitInfo, circuitImgSrc}) => {
                     <img 
                         className="w-fit h-fit max-lg:w-fit lg:max-h-72"
                         src={`${circuitImgSrc}`}
-                        alt={`${circuitInfo?.circuitName}`}
+                        alt={`${circuitInfo.circuitName}`}
                     />
                 </div>
                 <section className="max-md:self-start lg:place-self-start w-full max-md:w-full max-lg:w-[50%] me-2 my-3 max-lg:ms-2 text-sm max-lg:text-base">
                     <p className="py-1">
-                        <span className="font-f1-b">Circuit:</span> {circuitInfo ? circuitInfo.circuitName : "--"}
+                        <span className="font-f1-b">Circuit:</span> {circuitInfo.circuitName}
                     </p>
                     <p className="py-1">
-                        <span className="font-f1-b">Location:</span> {circuitInfo ? circuitInfo.Location.locality : "--"}
+                        <span className="font-f1-b">Location:</span> {circuitInfo.Location.locality}
                     </p>
                     <button className="flex flex-row justify-start border-s-2 border-b-2 rounded-bl-md border-red-600 w-52 pe-3 my-3 transition-all hover:w-60">
                         <IconContext.Provider value={ { style: { display: "inline" } } }>

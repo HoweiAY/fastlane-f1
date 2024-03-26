@@ -18,7 +18,7 @@ def getSeasonSchedule(year=None):
     try:
         events = fastf1.get_event_schedule(year)
         roundNumber = events.RoundNumber.tolist()  # No. of rounds in the season
-        countries = events.Country.tolist()  # names of the countries in which the event is held
+        countries = events.Country.tolist()  # names of the countries in which the events are held
         locations = events.Location.tolist()  # locations of the event
         officialEventNames = events.OfficialEventName.tolist()  # official name of the Grand Prix
         formats = events.EventFormat.tolist()  # format of the race weekends
