@@ -1,12 +1,16 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import TopNavBar from "./components/nav-bar/TopNavBar";
+import ErrorBoundary from "./components/error/ErrorBoundary";
 
 const MainContainer = () => {
+    const location = useLocation();
     return (
         <>
         <TopNavBar />
         <div>
-            <Outlet />
+            <ErrorBoundary key={location.pathname}>
+                <Outlet />
+            </ErrorBoundary>
         </div>
         </>
     );

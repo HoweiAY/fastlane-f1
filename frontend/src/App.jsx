@@ -1,3 +1,4 @@
+import React from "react";
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 import MainContainer from "./MainContainer";
@@ -8,6 +9,7 @@ import Results from "./pages/results/Results";
 import Drivers from "./pages/drivers/Drivers";
 import Teams from "./pages/teams/Teams";
 import Event from "./pages/event/Event";
+import Error from "./pages/error/Error";
 
 const App = () => {
   return (
@@ -26,6 +28,8 @@ const App = () => {
           <Route path="teams" element={<Teams/>} />
 
           <Route path="event/:season/:round/:location" element={<Event/>} />
+
+          <Route path="*" element={<Error/>} />
 
         </Route>
 
