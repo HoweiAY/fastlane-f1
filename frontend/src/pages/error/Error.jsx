@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 import errorIcon from "../../assets/icons/error_page/error.svg";
 
 const Error = ({onClick}) => {

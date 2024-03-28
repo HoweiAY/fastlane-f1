@@ -112,4 +112,5 @@ def getEventInfo(year=None, round=1):
         gpEvent["error"] = True
         status = 400
 
-    return jsonify(gpEvent), status
+    finally:
+        return jsonify(gpEvent), status
