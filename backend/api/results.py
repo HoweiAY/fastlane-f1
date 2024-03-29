@@ -134,7 +134,7 @@ def getRaceResult(year=None, round=1):
             }
             result["raceResult"].append(driverResult)
         
-        result["raceResult"].sort(key=lambda driverResult: driverResult["position"], reverse=True)
+        result["raceResult"].sort(key=lambda driverResult: driverResult["position"])
 
     except:
         result["error"] = True
