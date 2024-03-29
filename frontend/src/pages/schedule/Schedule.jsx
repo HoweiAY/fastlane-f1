@@ -61,7 +61,7 @@ const Schedule = () => {
                 </aside>
 
                 {!fullSchedule ? (
-                    <div className="max-md:self-center flex flex-row justify-center items-center w-[70%] h-100 max-md:w-[65%] min-w-80 ms-4 me-[10%] max-lg:mt-4">
+                    <div className="max-md:self-center flex flex-row justify-center items-center w-[70%] h-100 max-md:h-300 max-md:w-[65%] min-w-80 ms-4 me-[10%] max-lg:mt-4">
                         <LoadingSpinner width={"100"} height={"100"} color={"#DC2626"} />
                     </div>
                 ) : (
