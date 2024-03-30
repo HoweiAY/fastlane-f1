@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import DriverStandings from "../../components/standings/DriverStandings";
+import ConstructorStandings from "../../components/standings/ConstructorStandings";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import resultsBannerImage from "../../assets/images/common/results_banner_1.png";
 
@@ -17,12 +19,55 @@ const Results = () => {
     const [constructorStandings, setConstructorStandings] = useState(null);
     const [championshipResultTab, setChampionshipResultTab] = useState(championshipResultTabs[0]);
 
+    useEffect(() => {
+        const loadDriverStandings = async (year) => {
+            setDriverStandings(null);
+            const standings = await getDriverStandings(year);
+            if (!standings.error) {
+                setDriverStandings(standings["driverStandings"]);
+            }
+        };
+
+        const loadConstructorStandings = async (year) => {
+            setConstructorStandings(null);
+            const standings = await getConstructorStandings(year);
+            if (!standings.error) {
+                setConstructorStandings(standings["constructorStandings"]);
+            }
+        };
+
+        switch (championshipResultTab) {
+            case championshipResultTabs[0]:
+                loadDriverStandings(season);
+                break;
+            case championshipResultTabs[1]:
+                loadConstructorStandings(season);
+                break;
+            default: break;
+        }
+    }, [season, championshipResultTab]);
+
     const handleChangeSeason = (year) => {
         setSeason(year);
     };
 
     const handleSwitchChampionshipResultTab = (resultTab) => {
         setChampionshipResultTab(resultTab);
+    };
+
+    const displayChampionshipResultTab = (resultTab) => {
+        switch (resultTab) {
+            case championshipResultTabs[0]:
+                return (<DriverStandings driverStandings={driverStandings} />);
+            case championshipResultTabs[1]:
+                return (<ConstructorStandings constructorStandings={constructorStandings} />);
+            default:
+                return (
+                    <div className="flex flex-row justify-center items-center w-auto h-60 max-md:h-40">
+                        <LoadingSpinner width={"100"} height={"100"} color={"#DC2626"}/>
+                    </div>
+                );
+        }
     };
 
     return (
@@ -64,17 +109,16 @@ const Results = () => {
                             <div className="flex flex-row justify-start items-center">
                                 {championshipResultTabs.map((resultTab) => (
                                     <button
-                                        className={`rounded-t-sm px-3 py-1 ${championshipResultTab === resultTab ? "bg-slate-100" : "bg-white"} max-md:text-sm hover:bg-slate-100`}
+                                        key={resultTab}
+                                        className={`rounded-t-sm px-3 py-2 ${championshipResultTab === resultTab ? "bg-slate-100" : "bg-white"} max-md:text-sm hover:bg-slate-100`}
                                         onClick={() => {
                                             handleSwitchChampionshipResultTab(resultTab);
                                         }}
                                     >{resultTab}</button>
                                 ))}
                             </div>
-                            <div className="rounded-tr-sm rounded-b-sm pt-2 pb-3 px-2 min-h-60 max-md:min-h-40 bg-slate-100 max-lg:text-sm whitespace-nowrap overflow-scroll">
-                                <div className="flex flex-row justify-center items-center w-auto h-60 max-md:h-40">
-                                    <LoadingSpinner width={"100"} height={"100"} color={"#DC2626"}/>
-                                </div>
+                            <div className="rounded-tr-sm rounded-b-sm pt-2 pb-3 px-2 min-h-60 max-md:min-h-40 bg-slate-100 whitespace-nowrap overflow-scroll">
+                                {displayChampionshipResultTab(championshipResultTab)}
                             </div>
                         </div>
                     </section>
