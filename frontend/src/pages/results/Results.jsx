@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import DriverStandings from "../../components/standings/DriverStandings";
 import ConstructorStandings from "../../components/standings/ConstructorStandings";
+import EventList from "../../components/event/EventList";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import resultsBannerImage from "../../assets/images/common/results_banner_1.png";
 
@@ -46,6 +47,17 @@ const Results = () => {
             default: break;
         }
     }, [season, championshipResultTab]);
+
+    useEffect(() => {
+        const loadSchedule = async (year) => {
+            setFullSchedule(null);
+            const schedule = await getSchedule(year);
+            if (!schedule.error) {
+                setFullSchedule(schedule.events);
+            }
+        };
+        loadSchedule(season);
+    }, [season]);
 
     const handleChangeSeason = (year) => {
         setSeason(year);
@@ -105,7 +117,10 @@ const Results = () => {
                         <h2 className="border-b-4 max-md:border-b-2 border-gray-800 mx-10 pb-3 max-md:m-auto max-md:pb-1 max-lg:pb-2 md:ps-2 w-[92%] font-f1-b text-gray-800 text-4xl max-md:text-xl max-lg:text-2xl max-md:text-center">
                             Championship Standings
                         </h2>
-                        <div className="mx-10 my-4 py-2 max-md:mx-auto max-md:my-2 w-[90%] min-w-80 overflow-scroll">
+                        <p className="mx-10 pt-5 max-md:mx-5 max-md:py-3 text-gray-500 text-sm max-md:text-xs">
+                            Switch between Drivers and Constructors to view results for either championship.
+                        </p>
+                        <div className="mx-10 my-4 pb-2 max-md:mx-auto max-md:my-2 w-[90%] min-w-80 overflow-scroll">
                             <div className="flex flex-row justify-start items-center">
                                 {championshipResultTabs.map((resultTab) => (
                                     <button
@@ -127,6 +142,10 @@ const Results = () => {
                         <h2 className="border-b-4 max-md:border-b-2 border-gray-800 mx-10 pb-3 max-md:m-auto max-md:pb-1 max-lg:pb-2 md:ps-2 w-[92%] font-f1-b text-gray-800 text-4xl max-md:text-xl max-lg:text-2xl max-md:text-center">
                             Race Results
                         </h2>
+                        <p className="mx-10 pt-5 max-md:mx-5 max-md:pt-3 text-gray-500 text-sm max-md:text-xs">
+                            Select an event to view race results.
+                        </p>
+                        <EventList season={season} fullSchedule={fullSchedule} />
                     </section>
                 </div>
             </div>
