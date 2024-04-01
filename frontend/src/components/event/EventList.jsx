@@ -10,7 +10,7 @@ const EventList = ({season, fullSchedule}) => {
     const handleSelectEvent = (event) => {
         const round = event.round;
         const location = event.location.replace(/ /g, '_');
-        navigate(`/event/${season}/${round}/${location}`);
+        navigate(`/results/${season}/${round}/${location}`);
     };
 
     return (

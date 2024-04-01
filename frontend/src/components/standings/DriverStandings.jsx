@@ -20,7 +20,7 @@ const DriverStandings = ({driverStandings}) => {
                 </thead>
                 <tbody
                     key="table_body" 
-                    className=" [&>*:nth-child(even)]:bg-white text-sm"
+                    className=" [&>*:nth-child(even)]:bg-white text-sm max-md:text-xs"
                 >
                     {driverStandings.map((driver) => (
                         <tr 

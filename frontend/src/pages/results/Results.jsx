@@ -125,7 +125,7 @@ const Results = () => {
                                 {championshipResultTabs.map((resultTab) => (
                                     <button
                                         key={resultTab}
-                                        className={`rounded-t-sm px-3 py-2 ${championshipResultTab === resultTab ? "bg-slate-100" : "bg-white"} max-md:text-sm hover:bg-slate-100`}
+                                        className={`rounded-t-sm px-5 py-2 ${championshipResultTab === resultTab ? "bg-slate-100" : "bg-white"} max-md:text-sm hover:bg-slate-100`}
                                         onClick={() => {
                                             handleSwitchChampionshipResultTab(resultTab);
                                         }}

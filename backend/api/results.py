@@ -73,9 +73,10 @@ def getQualifyingResult(year=None, round=1):
         teams, teamColors = qualiResults.TeamName.tolist(), qualiResults.TeamColor.tolist()
         q1Times, q2Times, q3Times = qualiResults.Q1.tolist(), qualiResults.Q2.tolist(), qualiResults.Q3.tolist()
 
+        position = 1
         for pos, driver, driverNum, team, teamColor, q1Time, q2Time, q3Time in zip(finishingPos, drivers, driverNums, teams, teamColors, q1Times, q2Times, q3Times):
-            driverResult ={
-                "position": int(pos),
+            driverResult = {
+                "position": int(pos) if not math.isnan(pos) else position,
                 "driverName": driver,
                 "driverNum": int(driverNum),
                 "teamName": team,
@@ -85,6 +86,7 @@ def getQualifyingResult(year=None, round=1):
                 "q3": int(q3Time.total_seconds() * 1000) if not math.isnan(q3Time.total_seconds()) else -1,
             }
             result["qualifyingResult"].append(driverResult)
+            position += 1
         
         result["qualifyingResult"].sort(key=lambda driverResult: driverResult["position"])
 
@@ -116,14 +118,15 @@ def getRaceResult(year=None, round=1):
         raceResults = raceSession.results
 
         finishingPos, finishingPoints = raceResults.Position.tolist(), raceResults.Points.tolist()
-        drivers, driverNums = raceResults.FullName.tolist(), raceResults.DriverNumber.toList()
+        drivers, driverNums = raceResults.FullName.tolist(), raceResults.DriverNumber.tolist()
         teams, teamColors = raceResults.TeamName.tolist(), raceResults.TeamColor.tolist()
         raceTimes = raceResults.Time.tolist()
         finishingStatus = raceResults.Status.tolist()
 
+        position = 1
         for pos, driver, driverNum, team, teamColor, time, driverStatus, points in zip(finishingPos, drivers, driverNums, teams, teamColors, raceTimes, finishingStatus, finishingPoints):
             driverResult = {
-                "position": int(pos),
+                "position": int(pos) if not math.isnan(pos) else position,
                 "driverName": driver,
                 "driverNum": int(driverNum),
                 "teamName": team,
@@ -133,6 +136,7 @@ def getRaceResult(year=None, round=1):
                 "points": int(points),
             }
             result["raceResult"].append(driverResult)
+            position += 1
         
         result["raceResult"].sort(key=lambda driverResult: driverResult["position"])
 

@@ -9,6 +9,7 @@ import Results from "./pages/results/Results";
 import Drivers from "./pages/drivers/Drivers";
 import Teams from "./pages/teams/Teams";
 import Event from "./pages/event/Event";
+import EventResult from "./pages/results/EventResult";
 import Error from "./pages/error/Error";
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="teams" element={<Teams/>} />
 
           <Route path="event/:season/:round/:location" element={<Event/>} />
+          <Route path="results/:season/:round/:location" element={<EventResult/>} />
 
           <Route path="*" element={<Error/>} />
 
