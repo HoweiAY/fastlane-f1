@@ -211,3 +211,38 @@ def getLiveFlag():
     
     finally:
         return jsonify(liveData), status
+
+@live_timing_bp.route("/get_live_safety_car", methods=["GET"])
+def getLiveSafetyCar():
+    targetFlags = ["YELLOW", "DOUBLE YELLOW", "RED"]
+
+    liveData = {
+        "deployed": False,
+        "message": "",
+        "error": False
+    }
+    status = 200
+
+    try:
+        flagResponses = getFlag()
+        
+        incidentTimeUTC = None
+        flagCount = len(flagResponses) - 1
+        while flagCount >= 0 and flagResponses[flagCount]["flag"] not in targetFlags:
+            flagCount -= 1
+        if flagCount >= 0:
+            incidentTimeUTC = flagResponses[flagCount]["date"]
+
+        safetyCarResponses = getSafetyCar()
+        if len(safetyCarResponses) > 0:
+            safetyCarDeployTimeUTC = safetyCarResponses[-1]["date"]
+            if incidentTimeUTC and safetyCarDeployTimeUTC > incidentTimeUTC:
+                liveData["deployed"] = True
+                liveData["message"] = safetyCarResponses[-1]["message"]
+        
+    except:
+        liveData["error"] = True
+        status = 400
+    
+    finally:
+        return jsonify(liveData), status
