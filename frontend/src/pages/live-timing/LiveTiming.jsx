@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner";
-import LoadingDots from "../../components/common/LoadingDots";
+import LiveTimingTable from "../../components/live-timing/LiveTimingTable";
 import liveTimingBannerImage from "../../assets/images/common/live_timing_banner_1.png";
 
 import { getLiveDriverData, getLiveFlag, getLiveSafetyCar } from "../../api/live_timing";
@@ -30,6 +30,7 @@ const LiveTiming = () => {
     const [round, setRound] = useState(0);
     const [event, setEvent] = useState(null);
     const [eventLoaded, setEventLoaded] = useState(false);
+    const [sessionLoaded, setSessionLoaded] = useState(false);
     const [sessionType, setSessionType] = useState("--");
     const [eventActive, setEventActive] = useState(true);
     const [sessionActive, setSessionActive] = useState(true);
@@ -57,7 +58,8 @@ const LiveTiming = () => {
                 setEventLoaded(true);
             }
         };
-
+        //loadEvent(2024, 4);
+        //return;
         if (!fullSchedule) return;
 
         for (const event of fullSchedule) {
@@ -72,12 +74,15 @@ const LiveTiming = () => {
     }, [fullSchedule]);
 
     useEffect(() => {
+        //setSessionActive(true);
+        //return;
         if (!event) return;
 
         for (const [sessionName, sessionInfo] of Object.entries(event.sessions)) {
             if (sessionInfo && isSessionActive(sessionInfo, sessionName)) {
                 setSessionActive(true);
                 setSessionType(sessionName);
+                setSessionLoaded(true);
                 return;
             }
         }
@@ -91,8 +96,9 @@ const LiveTiming = () => {
                 setDriverData(liveData.standings);
             }
         }
-        loadLiveDriverData();
-    }, []);
+        if (!sessionLoaded || !sessionActive) return;
+            loadLiveDriverData();
+    }, [sessionLoaded, sessionActive]);
 
     const handleSelectSchedule = () => {
         navigate("/schedule");
@@ -123,9 +129,14 @@ const LiveTiming = () => {
                             {event?.eventName}
                         </h2>
                         {sessionActive ? (
-                            <h2 className="border-b-4 max-md:border-b-2 border-white mt-16 mb-8 pb-3 max-md:mt-10 max-md:pb-1 max-lg:pb-2 ps-2 max-md:ps-1 w-[90%] font-f1-b text-4xl max-md:text-2xl max-lg:text-3xl">
-                                {sessions[sessionType]}
-                            </h2>
+                            <div>
+                                <h2 className="mt-16 mb-2 max-md:mt-10 ps-2 max-md:ps-1 w-[90%] font-f1-b text-4xl max-md:text-2xl max-lg:text-3xl">
+                                    {sessions[sessionType]}
+                                </h2>
+                                <section className="border-t-4 border-e-4 border-white rounded-tr-xl p-2 overflow-scroll">
+                                    <LiveTimingTable driverData={driverData} />
+                                </section>
+                            </div>
                         ) : (
                             <div className="flex flex-col justify-center items-center mx-auto mt-14 p-4 w-fit">
                                 <h2 className="mb-3 max-md:mb-1 font-f1-b text-4xl max-md:text-2xl text-center">
@@ -162,7 +173,6 @@ const LiveTiming = () => {
             ) : (
                 <div className="flex flex-row justify-center items-center w-full h-[400px] max-md:h-[300px]">
                     <LoadingSpinner width={"100"} height={"100"} color={"#FFFFFF"} />
-                    {/*<LoadingDots width={"100"} height={"100"} color={"#DC2626"} radius={"5"}/>*/}
                 </div>
             )}
         </main> 
