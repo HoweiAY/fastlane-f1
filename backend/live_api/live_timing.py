@@ -2,53 +2,28 @@ from urllib.request import urlopen
 from flask import Blueprint, jsonify
 import asyncio
 import aiohttp
-import json
+import threading
 import math
 
 live_timing_bp = Blueprint("live_timing", __name__)
+
+baseUrl = "https://api.openf1.org/v1"
 
 async def fetch(session, url):
     async with session.get(url) as response:
         return await response.json()
 
-def getDrivers():
-    driverResponse = urlopen("https://api.openf1.org/v1/drivers?session_key=latest")
-    driverData = json.loads(driverResponse.read().decode("utf-8"))
-    if len(driverData) > 0:
-        driverData.sort(key=lambda driver: driver["driver_number"])
-    return driverData
-
-def getFlag():
-    chequeredResponse = urlopen("https://api.openf1.org/v1/race_control?session_key=latest&flag=CHEQUERED")
-    chequeredData = json.loads(chequeredResponse.read().decode("utf-8"))
-
-    endTime = ""
-    if len(chequeredData) > 0:
-        endTime = f"&date<={chequeredData[-1]['date']}"
-
-    flagResponse = urlopen(f"https://api.openf1.org/v1/race_control?session_key=latest&category=Flag{endTime}")
-    flagData = json.loads(flagResponse.read().decode("utf-8"))
-    return flagData
-
-def getSafetyCar():
-    safetyCarResponse = urlopen("https://api.openf1.org/v1/race_control?session_key=latest&category=SafetyCar")
-    safetyCarData = json.loads(safetyCarResponse.read().decode("utf-8"))
-    return safetyCarData
-
-def getLapNum():
-    leadDriverResponse = urlopen(f"https://api.openf1.org/v1/position?session_key=latest&position=1")
-    leaderData = json.loads(leadDriverResponse.read().decode("utf-8"))
-    leaderNum = leaderData[-1]["driver_number"]
-
-    lapResponse = urlopen(f"https://api.openf1.org/v1/laps?session_key=latest&driver_number={leaderNum}")
-    lapNumData = json.loads(lapResponse.read().decode("utf-8"))
-    return lapNumData
+async def getDrivers():
+    async with aiohttp.ClientSession() as session:
+        driverurl = f"{baseUrl}/drivers?session_key=latest"
+        driverData = await fetch(session, driverurl)
+        return driverData
 
 async def getDriverPositions(driverNums):
     urls = []
 
     for driverNum in driverNums:
-        urls.append(f"https://api.openf1.org/v1/position?session_key=latest&driver_number={driverNum}")
+        urls.append(f"{baseUrl}/position?session_key=latest&driver_number={driverNum}")
 
     async with aiohttp.ClientSession() as session:
         tasks = []
@@ -63,7 +38,7 @@ async def getDriverIntervals(driverNums):
     urls = []
 
     for driverNum in driverNums:
-        urls.append(f"https://api.openf1.org/v1/intervals?session_key=latest&driver_number={driverNum}")
+        urls.append(f"{baseUrl}/intervals?session_key=latest&driver_number={driverNum}")
     
     async with aiohttp.ClientSession() as session:
         tasks = []
@@ -78,7 +53,7 @@ async def getDriverLaptimes(driverNums, sortByFastest=False):
     urls = []
 
     for driverNum in driverNums:
-        urls.append(f"https://api.openf1.org/v1/laps?session_key=latest&driver_number={driverNum}")
+        urls.append(f"{baseUrl}/laps?session_key=latest&driver_number={driverNum}")
     
     async with aiohttp.ClientSession() as session:
         tasks = []
@@ -99,7 +74,7 @@ async def getDriverStints(driverNums):
     urls = []
 
     for driverNum in driverNums:
-        urls.append(f"https://api.openf1.org/v1/stints?session_key=latest&driver_number={driverNum}")
+        urls.append(f"{baseUrl}/stints?session_key=latest&driver_number={driverNum}")
     
     async with aiohttp.ClientSession() as session:
         tasks = []
@@ -109,6 +84,36 @@ async def getDriverStints(driverNums):
         
         stintResponses = await asyncio.gather(*tasks)
         return stintResponses
+
+async def getFlag():
+    async with aiohttp.ClientSession() as session:
+        chequeredUrl = f"{baseUrl}/race_control?session_key=latest&flag=CHEQUERED"
+        chequeredData = await fetch(session, chequeredUrl)
+
+        endTime = ""
+        if len(chequeredData) > 0:
+            endTime = f"&date<={chequeredData[-1]['date']}"
+        
+        flagUrl = f"{baseUrl}/race_control?session_key=latest&category=Flag{endTime}"
+        flagData = await fetch(session, flagUrl)
+        return flagData
+
+async def getSafetyCar():
+    async with aiohttp.ClientSession() as session:
+        safetyCarUrl = f"{baseUrl}/race_control?session_key=latest&category=SafetyCar"
+        safetyCarData = await fetch(session, safetyCarUrl)
+        return safetyCarData
+
+async def getLapNum():
+    async with aiohttp.ClientSession() as session:
+        leaderUrl = f"{baseUrl}/position?session_key=latest&position=1"
+        leaderData = await fetch(session, leaderUrl)
+        leaderNum = leaderData[-1]["driver_number"]
+
+        async with aiohttp.ClientSession() as session:
+            lapNumUrl = f"{baseUrl}/laps?session_key=latest&driver_number={leaderNum}"
+            lapNumData = await fetch(session, lapNumUrl)
+            return lapNumData
 
 
 @live_timing_bp.route("/get_live_driver_data", methods=["GET"])
@@ -120,70 +125,79 @@ def getLiveDriverData(sessionType=""):
     }
     status = 200
 
+    async def getDriverDataAsync(sessionType=""):
+        try:
+            drivers = await getDrivers()
+            driverNums = [driver["driver_number"] for driver in drivers]
+            posResponses = await getDriverPositions(driverNums)
+            lapResponses = await getDriverLaptimes(driverNums)
+            fastestLapResponses = await getDriverLaptimes(driverNums, sortByFastest=True)
+            stintResponses = await getDriverStints(driverNums)
+
+            intervalResponses = None
+            if sessionType == "sprint" or sessionType == "race":
+                intervalResponses = await getDriverIntervals(driverNums)
+            
+            for driverData, posData, lapData, fastestLapData, stintData in zip(drivers, posResponses, lapResponses, fastestLapResponses, stintResponses):
+                data = {
+                    "name": "--",
+                    "position": 0,
+                    "gap": "--",
+                    "interval": "--",
+                    "laptime": 0,
+                    "s1Time": 0,
+                    "s2Time": 0,
+                    "s3Time": 0,
+                    "fastestLap": 0,
+                    "outLap": False,
+                    "tyre": "--",
+                    "stint": 0,
+                }
+
+                data["name"] = f"{driverData['broadcast_name']}"
+                data["position"] = posData[-1]["position"]
+
+                if len(lapData) > 0:
+                    data["laptime"] = int(lapData[-1]["lap_duration"] * 1000) if lapData[-1]["lap_duration"] else -1
+                    data["s1Time"] = lapData[-1]["duration_sector_1"] if lapData[-1]["duration_sector_1"] else -1
+                    data["s2Time"] = lapData[-1]["duration_sector_2"] if lapData[-1]["duration_sector_2"] else -1
+                    data["s3Time"] = lapData[-1]["duration_sector_3"] if lapData[-1]["duration_sector_3"] else -1
+                    data["outLap"] = lapData[-1]["is_pit_out_lap"]
+                
+                if len(fastestLapData) > 0:
+                    data["fastestLap"] = int(fastestLapData[-1]["lap_duration"] * 1000) if fastestLapData[-1]["lap_duration"] else -1
+                
+                data["tyre"] = stintData[-1]["compound"]
+                data["stint"] = stintData[-1]["stint_number"]
+
+                liveData["standings"].append(data)
+
+            
+            if intervalResponses is not None:
+                for data, intervalData in zip(liveData["standings"], intervalResponses):
+                    if len(intervalData) > 0:
+                        data["gap"] = intervalData[-1]["gap_to_leader"]
+                        data["interval"] = intervalData[-1]["interval"]
+            
+            liveData["standings"].sort(key=lambda driverData: driverData["position"])
+
+        except:
+            liveData["error"] = True
+            status = 400
+        
+        finally:
+            await asyncio.sleep(1)
+    
+    def getLiveData(sessionType=""):
+        asyncio.run(getDriverDataAsync(sessionType))
+
     try:
-        drivers = getDrivers()
-        driverNums = [driver["driver_number"] for driver in drivers]
-
-        loop = asyncio.get_event_loop()
-        posResponses = loop.run_until_complete(getDriverPositions(driverNums))
-        lapResponses = loop.run_until_complete(getDriverLaptimes(driverNums))
-        fastestLapResponses = loop.run_until_complete(getDriverLaptimes(driverNums, sortByFastest=True))
-        stintResponses = loop.run_until_complete(getDriverStints(driverNums))
-
-        intervalResponses = None
-        if sessionType == "sprint" or sessionType == "race":
-            intervalResponses = loop.run_until_complete(getDriverIntervals(driverNums))
-        
-        for driverData, posData, lapData, fastestLapData, stintData in zip(drivers, posResponses, lapResponses, fastestLapResponses, stintResponses):
-            data = {
-                "name": "--",
-                "position": 0,
-                "gap": "--",
-                "interval": "--",
-                "laptime": 0,
-                "s1Time": 0,
-                "s2Time": 0,
-                "s3Time": 0,
-                "fastestLap": 0,
-                "outLap": False,
-                "tyre": "--",
-                "stint": 0,
-            }
-
-            data["name"] = f"{driverData['broadcast_name']}"
-            data["position"] = posData[-1]["position"]
-
-            if len(lapData) > 0:
-                data["laptime"] = int(lapData[-1]["lap_duration"] * 1000) if lapData[-1]["lap_duration"] else -1
-                data["s1Time"] = int(lapData[-1]["duration_sector_1"] * 1000) if lapData[-1]["duration_sector_1"] else -1
-                data["s2Time"] = int(lapData[-1]["duration_sector_2"] * 1000) if lapData[-1]["duration_sector_2"] else -1
-                data["s3Time"] = int(lapData[-1]["duration_sector_3"] * 1000) if lapData[-1]["duration_sector_3"] else -1
-                data["outLap"] = lapData[-1]["is_pit_out_lap"]
-            
-            if len(fastestLapData) > 0:
-                data["fastestLap"] = int(fastestLapData[-1]["lap_duration"] * 1000) if fastestLapData[-1]["lap_duration"] else -1
-            
-            data["tyre"] = stintData[-1]["compound"]
-            data["stint"] = stintData[-1]["stint_number"]
-
-            liveData["standings"].append(data)
-
-        
-        if intervalResponses is not None:
-            for data, intervalData in zip(liveData["standings"], intervalResponses):
-                if len(intervalData) > 0:
-                    data["gap"] = intervalData[-1]["gap_to_leader"]
-                    data["interval"] = intervalData[-1]["interval"]
-        
-        liveData["standings"].sort(key=lambda driverData: driverData["position"])
-
+        getLiveData(sessionType)
     except:
         liveData["error"] = True
         status = 400
-
-    finally:
-        return jsonify(liveData), status
-
+    
+    return jsonify(liveData), status
 
 @live_timing_bp.route("/get_live_flag", methods=["GET"])
 def getLiveFlag():
@@ -195,22 +209,34 @@ def getLiveFlag():
     }
     status = 200
 
-    try:
-        flagResponses = getFlag()
-        
-        flagCount = len(flagResponses) - 1
-        while flagCount >= 0 and flagResponses[flagCount]["flag"] not in targetFlags:
-            flagCount -= 1
-        
-        if flagCount >= 0:
-            liveData["flag"] = flagResponses[flagCount]["flag"]
+    async def getLiveFlagAsync():
+        try:
+            flagResponses = await getFlag()
             
+            flagCount = len(flagResponses) - 1
+            while flagCount >= 0 and flagResponses[flagCount]["flag"] not in targetFlags:
+                flagCount -= 1
+            
+            if flagCount >= 0:
+                liveData["flag"] = flagResponses[flagCount]["flag"]
+                
+        except:
+            liveData["error"] = True
+            status = 400
+        
+        finally:
+            await asyncio.sleep(1)
+    
+    def getLiveData():
+        asyncio.run(getLiveFlagAsync())
+
+    try:
+        getLiveData()
     except:
         liveData["error"] = True
         status = 400
-    
-    finally:
-        return jsonify(liveData), status
+
+    return jsonify(liveData), status
 
 @live_timing_bp.route("/get_live_safety_car", methods=["GET"])
 def getLiveSafetyCar():
@@ -223,26 +249,38 @@ def getLiveSafetyCar():
     }
     status = 200
 
-    try:
-        flagResponses = getFlag()
-        
-        incidentTimeUTC = None
-        flagCount = len(flagResponses) - 1
-        while flagCount >= 0 and flagResponses[flagCount]["flag"] not in targetFlags:
-            flagCount -= 1
-        if flagCount >= 0:
-            incidentTimeUTC = flagResponses[flagCount]["date"]
+    async def getLiveSafetyCarAsync():
+        try:
+            flagResponses = await getFlag()
+            
+            incidentTimeUTC = None
+            flagCount = len(flagResponses) - 1
+            while flagCount >= 0 and flagResponses[flagCount]["flag"] not in targetFlags:
+                flagCount -= 1
+            if flagCount >= 0:
+                incidentTimeUTC = flagResponses[flagCount]["date"]
 
-        safetyCarResponses = getSafetyCar()
-        if len(safetyCarResponses) > 0:
-            safetyCarDeployTimeUTC = safetyCarResponses[-1]["date"]
-            if incidentTimeUTC and safetyCarDeployTimeUTC > incidentTimeUTC:
-                liveData["deployed"] = True
-                liveData["message"] = safetyCarResponses[-1]["message"]
+            safetyCarResponses = await getSafetyCar()
+            if len(safetyCarResponses) > 0:
+                safetyCarDeployTimeUTC = safetyCarResponses[-1]["date"]
+                if incidentTimeUTC and safetyCarDeployTimeUTC > incidentTimeUTC:
+                    liveData["deployed"] = True
+                    liveData["message"] = safetyCarResponses[-1]["message"]
+            
+        except:
+            liveData["error"] = True
+            status = 400
         
+        finally:
+            await asyncio.sleep(1)
+    
+    def getLiveData():
+        asyncio.run(getLiveSafetyCarAsync())
+
+    try:
+        getLiveData()
     except:
         liveData["error"] = True
         status = 400
-    
-    finally:
-        return jsonify(liveData), status
+
+    return jsonify(liveData), status
