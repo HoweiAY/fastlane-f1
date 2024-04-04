@@ -18,3 +18,20 @@ export const millisecondToTimeString = (timeMillisecond, includeHours = true) =>
         return `${hoursFormatted}:${minutesFormatted}:${secondsFormatted}.${millisecondsFormatted}`;
     else return `${minutesFormatted}:${secondsFormatted}.${millisecondsFormatted}`;
 };
+
+export const getLaptimeFromMillisecond = (timeMillisecond) => {
+    const minutes = Math.floor(timeMillisecond / 60000);
+    const seconds = Math.floor((timeMillisecond % 60000) / 1000);
+    const milliseconds = timeMillisecond % 1000;
+
+    const minutesFormatted = minutes;
+    const secondsFormatted = seconds < 10 ? "0" + seconds : seconds;
+    const millisecondsFormatted = 
+        milliseconds < 10
+        ? "00" + milliseconds
+        : milliseconds < 100
+        ? "0" + milliseconds
+        : milliseconds;
+    
+    return `${minutesFormatted}:${secondsFormatted}.${millisecondsFormatted}`;
+};
