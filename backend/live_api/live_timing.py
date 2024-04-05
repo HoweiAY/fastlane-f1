@@ -10,8 +10,11 @@ live_timing_bp = Blueprint("live_timing", __name__)
 baseUrl = "https://api.openf1.org/v1"
 
 async def fetch(session, url):
-    async with session.get(url) as response:
-        return await response.json()
+    try:
+        async with session.get(url) as response:
+            return await response.json()
+    except:
+        return []
 
 async def getDrivers():
     async with aiohttp.ClientSession() as session:
@@ -125,7 +128,7 @@ def getLiveDriverData(sessionType=""):
     }
     status = 200
 
-    async def getDriverDataAsync(sessionType=""):
+    async def getDriverDataAsync(sessionType="--"):
         try:
             drivers = await getDrivers()
             driverNums = [driver["driver_number"] for driver in drivers]
@@ -167,8 +170,9 @@ def getLiveDriverData(sessionType=""):
                 if len(fastestLapData) > 0:
                     data["fastestLap"] = int(fastestLapData[-1]["lap_duration"] * 1000) if fastestLapData[-1]["lap_duration"] else -1
                 
-                data["tyre"] = stintData[-1]["compound"]
-                data["stint"] = stintData[-1]["stint_number"]
+                if len(stintData) > 0:
+                    data["tyre"] = stintData[-1]["compound"]
+                    data["stint"] = stintData[-1]["stint_number"]
 
                 liveData["standings"].append(data)
 
@@ -180,12 +184,9 @@ def getLiveDriverData(sessionType=""):
                         data["interval"] = intervalData[-1]["interval"]
             
             liveData["standings"].sort(key=lambda driverData: driverData["position"])
+            await asyncio.sleep(1)
 
         except:
-            liveData["error"] = True
-            status = 400
-        
-        finally:
             await asyncio.sleep(1)
     
     def getLiveData(sessionType=""):
@@ -219,12 +220,10 @@ def getLiveFlag():
             
             if flagCount >= 0:
                 liveData["flag"] = flagResponses[flagCount]["flag"]
+            
+            await asyncio.sleep(1)
                 
         except:
-            liveData["error"] = True
-            status = 400
-        
-        finally:
             await asyncio.sleep(1)
     
     def getLiveData():
@@ -267,11 +266,9 @@ def getLiveSafetyCar():
                     liveData["deployed"] = True
                     liveData["message"] = safetyCarResponses[-1]["message"]
             
+            await asyncio.sleep(1)
+
         except:
-            liveData["error"] = True
-            status = 400
-        
-        finally:
             await asyncio.sleep(1)
     
     def getLiveData():
