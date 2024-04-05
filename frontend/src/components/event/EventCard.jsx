@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { countryCodes } from "../../utils/country_code";
 
-const EventCard = ({event, onClick}) => {
+const EventCard = ({event, onClick, stylized}) => {
     const [countryCode, setCountryCode] = useState("xx");
     const [circuitImgSrc, setCircuitImgSrc] = useState("");
     
@@ -38,7 +38,7 @@ const EventCard = ({event, onClick}) => {
 
     return (
         <div 
-            className="col-span-1 min-w-52 max-lg:min-w-48 h-full border shadow-md shadow-gray-300 rounded-lg mx-3 bg-gray-50 hover:scale-105 hover:cursor-pointer transition-all duration-500 z-0"
+            className={`col-span-1 min-w-52 max-lg:min-w-48 h-full border rounded-lg mx-3 bg-gray-50 hover:cursor-pointer z-0 ${!stylized && "shadow-sm"} ${stylized && "shadow-md shadow-gray-300 hover:scale-105 transition-all duration-500"}`}
             onClick={() => onClick(event)}
         >
             <h2 className="mx-4 mt-2 font-f1-w text-base whitespace-nowrap overflow-hidden">

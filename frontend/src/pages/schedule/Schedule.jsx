@@ -70,7 +70,8 @@ const Schedule = () => {
                             <EventCard 
                                 key={event.dateFormatted}
                                 event={event} 
-                                onClick={(event) => handleSelectEvent(event)} 
+                                onClick={(event) => handleSelectEvent(event)}
+                                stylized={true}
                             />
                         )}
                     </div>
