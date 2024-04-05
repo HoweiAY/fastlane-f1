@@ -1,15 +1,3 @@
-const getTimeUTC = (timeUTC) => {
-    return Date.UTC(
-        timeUTC.getUTCFullYear(),
-        timeUTC.getUTCMonth(),
-        timeUTC.getUTCDate(),
-        timeUTC.getUTCHours(),
-        timeUTC.getUTCMinutes(),
-        timeUTC.getUTCSeconds(),
-        timeUTC.getUTCMilliseconds()
-    );
-}
-
 const getSessionEndTimeUTC = (sessionType, startTimeUTC) => {
     let endTimeUTC = new Date(startTimeUTC);
     switch (sessionType) {
@@ -43,17 +31,9 @@ export const isEventActive = (event) => {
 
     startTimeUTC.setHours(startTimeUTC.getHours() - 1);
     return (
-        currTimeUTC.getUTCMilliseconds() >= startTimeUTC.getUTCMilliseconds() 
-        && currTimeUTC.getUTCMilliseconds() <= endTimeUTC.getUTCMilliseconds()
+        currTimeUTC >= startTimeUTC
+        && currTimeUTC <= endTimeUTC
     );
-};
-
-export const isEventFinished = (event) => {
-
-};
-
-export const getNextEvent = (fullSchedule) => {
-
 };
 
 export const isSessionActive = (session, sessionType) => {
@@ -62,7 +42,7 @@ export const isSessionActive = (session, sessionType) => {
     const endTimeUTC = getSessionEndTimeUTC(sessionType, startTimeUTC);
 
     startTimeUTC.setMinutes(startTimeUTC.getMinutes() - 5);
-    return (currTimeUTC.getUTCMilliseconds() >= startTimeUTC.getUTCMilliseconds() && currTimeUTC.getUTCMilliseconds() <= endTimeUTC.getUTCMilliseconds());
+    return (currTimeUTC >= startTimeUTC && currTimeUTC <= endTimeUTC);
 };
 
 export const isSessionFinished = (session, sessionType) => {
@@ -70,8 +50,4 @@ export const isSessionFinished = (session, sessionType) => {
     const endTimeUTC = getSessionEndTimeUTC(sessionType, new Date(session.timeFormatted));
 
     return currTimeUTC > endTimeUTC;
-};
-
-export const getNextSession = (event) => {
-
 };

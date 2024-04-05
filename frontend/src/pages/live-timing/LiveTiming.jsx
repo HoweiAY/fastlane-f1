@@ -9,11 +9,13 @@ import { getLiveDriverData, getLiveFlag, getLiveSafetyCar } from "../../api/live
 import { getSchedule } from "../../api/season_schedule";
 import { getEventInfo } from "../../api/gp_event";
 import { isEventActive, isSessionActive } from "../../utils/event_utils";
+import { countryCodes } from "../../utils/country_code";
 
 const LiveTiming = () => {
     const navigate = useNavigate();
 
     const currentYear = new Date().getUTCFullYear();
+
     const sessions = {
         "practice1": "Practice 1",
         "practice2": "Practice 2",
@@ -26,16 +28,30 @@ const LiveTiming = () => {
         "--": "--",
     }
 
+    const flagBackgroundColors = {
+        "GREEN": "",
+        "CLEAR": "",
+        "YELLOW": "bg-yellow-400",
+        "DOUBLE YELLOW": "bg-yellow-400",
+        "RED": "bg-red-600",
+        "CHEQUERED": "bg-black",
+    };
+
     const [fullSchedule, setFullSchedule] = useState(null);
     const [round, setRound] = useState(0);
     const [event, setEvent] = useState(null);
+    const [countryCode, setCountryCode] = useState("xx");
     const [eventLoaded, setEventLoaded] = useState(false);
     const [sessionLoaded, setSessionLoaded] = useState(false);
     const [sessionType, setSessionType] = useState("--");
     const [eventActive, setEventActive] = useState(true);
     const [sessionActive, setSessionActive] = useState(true);
     const [driverData, setDriverData] = useState(null);
-    const [updateDriverData, setUpdateDriverData] = useState(null);
+    const [flagData, setFlagData] = useState(null);
+    const [safetyCarData, setSafetyCarData] = useState(null);
+    const [driverDataInterval, setDriverDataInterval] = useState(null);
+    const [flagDataInterval, setFlagDataInterval] = useState(null);
+    const [safetyCarDataInterval, setSafetyCarDataInterval] = useState(null);
 
     useEffect(() => {
         const loadSchedule = async (year) => {
@@ -53,13 +69,11 @@ const LiveTiming = () => {
             if (!event.error) {
                 setEvent(event);
                 setRound(round);
-                setSessionType("race");
                 setEventActive(true);
                 setEventLoaded(true);
             }
         };
-        //loadEvent(2024, 4);
-        //return;
+
         if (!fullSchedule) return;
 
         for (const event of fullSchedule) {
@@ -74,8 +88,24 @@ const LiveTiming = () => {
     }, [fullSchedule]);
 
     useEffect(() => {
-        //setSessionActive(true);
-        //return;
+        if (!event) return;
+
+        setCountryCode(countryCodes[event.country]?.toLowerCase() || "xx");
+        switch (event.country) {
+            case "Abu Dhabi":
+                setCountryCode("ae");
+                break;
+            case "Great Britain":
+                setCountryCode("gb");
+                break;
+            case "Russia":
+                setCountryCode("ru");
+                break;
+            default: break;
+        }
+    }, [event]);
+
+    useEffect(() => {
         if (!event) return;
 
         for (const [sessionName, sessionInfo] of Object.entries(event.sessions)) {
@@ -90,14 +120,67 @@ const LiveTiming = () => {
     }, [event]);
 
     useEffect(() => {
-        const loadLiveDriverData = async () => {
-            const liveData = await getLiveDriverData();
+        const loadLiveDriverData = async (sessionType) => {
+            const liveData = await getLiveDriverData(sessionType);
             if (!liveData.error) {
                 setDriverData(liveData.standings);
             }
+        };
+
+        const checkSafetyCar = (flag) => {
+            const loadSafetyCarData = async () => {
+                const liveData = await getLiveSafetyCar();
+                if (!liveData.error) {
+                    setSafetyCarData(liveData);
+                }
+            };
+
+            if (!flag) return;
+
+            if (flag === "YELLOW" || flag === "DOUBLE YELLOW" || flag === "RED") {
+                loadSafetyCarData();
+            }
+        };
+
+        const loadLiveFlagData = async () => {
+            const liveData = await getLiveFlag();
+            if (!liveData.error) {
+                setFlagData(liveData.flag);
+            }
+        };
+
+        const clearAllIntervals = () => {
+            console.log("Clearing intervals")
+            if (driverDataInterval) clearInterval(driverDataInterval);
+            if (flagDataInterval) clearInterval(flagDataInterval);
+            if (safetyCarDataInterval) clearInterval(safetyCarDataInterval);
+        };
+
+        if (!sessionLoaded || !sessionActive) {
+            return () => clearAllIntervals();
         }
-        if (!sessionLoaded || !sessionActive) return;
-            loadLiveDriverData();
+
+        clearAllIntervals();
+
+        loadLiveDriverData(sessionType);
+        if (!driverDataInterval) {
+            const driverDataID = setInterval(loadLiveDriverData, 20000, sessionType);
+            setDriverDataInterval(driverDataID);
+        }
+
+        loadLiveFlagData();
+        if (!flagDataInterval) {
+            const flagDataID = setInterval(loadLiveFlagData, 40000);
+            setFlagDataInterval(flagDataID);
+        }
+
+        checkSafetyCar();
+        if (!safetyCarDataInterval) {
+            const safetyCarDataID = setInterval(checkSafetyCar, 40000, flagData);
+            setSafetyCarDataInterval(safetyCarDataID);
+        }
+
+        return () => clearAllIntervals();
     }, [sessionLoaded, sessionActive]);
 
     const handleSelectSchedule = () => {
@@ -124,8 +207,9 @@ const LiveTiming = () => {
                     <div className="mx-auto pt-14 max-md:pt-10 w-[95%]">
                         <h2 className="px-5 pb-2 max-md:pb-1 font-f1-w text-2xl max-md:text-lg max-lg:text-xl">
                             Round {round}
+                            <span className={`rounded-sm ms-5 max-md:ms-3 fi fi-${countryCode}`}></span>
                         </h2>
-                        <h2 className="border-t-8 border-s-8 border-red-600 rounded-tl-3xl ps-4 pe-2 py-3 max-md:ps-3 max-md:py-2 text-2xl max-sm:text-base max-md:text-lg max-lg:text-xl whitespace-break-spaces">
+                        <h2 className="border-t-8 border-s-8 border-red-600 rounded-tl-3xl ps-4 pe-2 py-3 max-md:ps-3 max-md:py-2 font-f1-bl text-3xl max-sm:text-lg max-md:text-xl max-lg:text-2xl whitespace-break-spaces">
                             {event?.eventName}
                         </h2>
                         {sessionActive ? (
@@ -134,7 +218,15 @@ const LiveTiming = () => {
                                     {sessions[sessionType]}
                                 </h2>
                                 <section className="border-t-4 border-e-4 border-white rounded-tr-xl p-2 overflow-scroll">
-                                    <LiveTimingTable driverData={driverData} />
+                                <div className={`${flagData === "GREEN" || flagData === "CLEAR" ? "h-0" : "h-9"} ${flagData && flagBackgroundColors[flagData]} rounded-xl max-md:rounded-lg my-3 mx-auto p-auto w-[95%] min-w-10 overflow-hidden transition-all duration-500`}>
+                                    {safetyCarData && (safetyCarData.deployed && flagData !== "RED") ? 
+                                        <p className="p-2 text-sm text-center">{safetyCarData.message}</p> 
+                                        : 
+                                        <p className="p-2 text-sm text-center">{flagData ? `${flagData} FLAG` : "--"}</p>
+                                    }
+                                    
+                                </div>
+                                    <LiveTimingTable driverData={driverData} sessionType={sessionType} />
                                 </section>
                             </div>
                         ) : (
