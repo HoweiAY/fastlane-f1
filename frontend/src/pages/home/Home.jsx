@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import EventCarousel from "../../components/event/EventCarousel";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 
+import { getNextEventRound } from "../../utils/event_utils";
 import { getSchedule } from "../../api/season_schedule";
 import heroBannerImage from "../../assets/images/common/home_banner_1.png";
 
@@ -31,12 +32,15 @@ const Home = () => {
 
     const [season, setSeason] = useState(new Date().getUTCFullYear());
     const [fullSchedule, setFullSchedule] = useState(null);
+    const [round, setRound] = useState(null);
 
     useEffect(() => {
         const loadSchedule = async (year) => {
             setFullSchedule(null);
             const schedule = await getSchedule(year);
             if (!schedule.error) {
+                const eventRound = getNextEventRound(schedule.events);
+                setRound(eventRound);
                 setFullSchedule(schedule.events);
             }
         };
@@ -72,8 +76,9 @@ const Home = () => {
                     <div className="md:hidden w-[95%]">
                         <ScheduleDescription onClick={() => handleSelectViewSchedule()} />
                     </div>
-                    <div className="w-[50%] max-w-[30rem] max-md:w-[90%] mx-8 px-8">
-                        {fullSchedule && <EventCarousel fullSchedule={fullSchedule} />}
+                    <div className="w-[50%] max-w-[30rem] max-md:w-[80%] max-lg:w-[45%] mx-8 px-8">
+                        {fullSchedule && <EventCarousel fullSchedule={fullSchedule} round={round} />}
+                        {!fullSchedule && <LoadingSpinner width={"100"} height={"100"} color={"#DC2626"} />}
                     </div>
                     <button 
                         className="md:hidden border border-red-600 rounded-lg my-4 p-2 text-white max-md:text-sm bg-red-600"

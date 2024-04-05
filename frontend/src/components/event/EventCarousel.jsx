@@ -31,7 +31,7 @@ const PrevEventArrow = (props) => {
     );
 }
 
-const EventCarousel = ({fullSchedule}) => {
+const EventCarousel = ({fullSchedule, round}) => {
     const navigate = useNavigate();
 
     const [season, setSeason] = useState(new Date().getUTCFullYear());
@@ -53,6 +53,7 @@ const EventCarousel = ({fullSchedule}) => {
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
+        initialSlide: round ? round : 0,
         nextArrow: <NextEventArrow />,
         prevArrow: <PrevEventArrow />
     };

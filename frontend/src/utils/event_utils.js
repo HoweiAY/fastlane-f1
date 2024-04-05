@@ -30,10 +30,27 @@ export const isEventActive = (event) => {
     const endTimeUTC = getSessionEndTimeUTC("race", new Date(`${event.endDate.timeFormatted}Z`));
 
     startTimeUTC.setHours(startTimeUTC.getHours() - 1);
-    return (
-        currTimeUTC >= startTimeUTC
-        && currTimeUTC <= endTimeUTC
-    );
+    return (currTimeUTC >= startTimeUTC && currTimeUTC <= endTimeUTC);
+};
+
+export const getNextEventRound = (fullSchedule) => {
+    if (!fullSchedule || fullSchedule.length === 0) return -1;
+
+    const currTimeUTC = new Date();
+    let eventEndTimeUTC;
+    let round = 0;
+    for (const event of fullSchedule) {
+        round = event.round;
+        if (round === 0 && new Date(event.startDate.timeFormatted) >= currTimeUTC)
+            break;
+
+        eventEndTimeUTC = new Date(`${event.endDate.timeFormatted}Z`);
+        eventEndTimeUTC = getSessionEndTimeUTC("race", eventEndTimeUTC);
+
+        if (currTimeUTC <= eventEndTimeUTC) return round;
+    }
+
+    return 0;
 };
 
 export const isSessionActive = (session, sessionType) => {
