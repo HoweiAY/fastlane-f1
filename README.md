@@ -2,7 +2,7 @@
 
 A React web application for Formula 1 live timings, event schedules and race results.
 
-![Screenshot of the home page of FastLane](https://github.com/HoweiAY/fastlane_f1/assets/120775414/4a245043-7c59-48db-ade1-ebd59ec6f737)
+![Screenshot of the home page of FastLane](https://github.com/HoweiAY/fastlane_f1/blob/main/docs/static/screenshots/home_1.png)
 
 ## Features
 
@@ -52,19 +52,23 @@ This project uses theOehrly's [FastF1 Python package](https://github.com/theOehr
 
 Here are some screenshots of the developed parts of the application:
 
+### Live Timing
+
+![Screenshot of the live timing page for qualifying of the 2024 Japanese Grand Prix](https://github.com/HoweiAY/fastlane_f1/blob/main/docs/static/screenshots/live_timing_1.png)
+
 ### Schedule
 
-![Screenshot of the full schedule page](https://github.com/HoweiAY/fastlane_f1/assets/120775414/23a98e30-3224-4716-913d-b94cddcff39b)
+![Screenshot of the full schedule page](https://github.com/HoweiAY/fastlane_f1/blob/main/docs/static/screenshots/schedule_1.png)
 
-![Screenshot of the event schedule page for the Abu Dhabi Grand Prix 2021](https://github.com/HoweiAY/fastlane_f1/assets/120775414/0a7b5fbb-e9f0-4d4a-aaf5-f6dfaac7fdfc)
+![Screenshot of the event schedule page for the Abu Dhabi Grand Prix 2021](https://github.com/HoweiAY/fastlane_f1/blob/main/docs/static/screenshots/schedule_2.png)
 
 ### Results
 
-![Screenshot of the results page showing the drivers championship of the 2023 season](https://github.com/HoweiAY/fastlane_f1/assets/120775414/3d592821-ea5d-4629-bee6-c7532ad0e5dc)
+![Screenshot of the results page showing the drivers championship of the 2023 season](https://github.com/HoweiAY/fastlane_f1/blob/main/docs/static/screenshots/results_1.png)
 
-![Screenshot of the results page with the list of races in the 2019 season](https://github.com/HoweiAY/fastlane_f1/assets/120775414/9e54a2de-3461-4164-9796-306ca2e75ea6)
+![Screenshot of the results page with the list of races in the 2019 season](https://github.com/HoweiAY/fastlane_f1/blob/main/docs/static/screenshots/results_2.png)
 
-![Screenshot of the event result page of the 2023 Miami Grand Prix](https://github.com/HoweiAY/fastlane_f1/assets/120775414/8b603e81-8110-4279-a7ba-2f23af138b86)
+![Screenshot of the event result page of the 2023 Miami Grand Prix](https://github.com/HoweiAY/fastlane_f1/blob/main/docs/static/screenshots/event_results_1.png)
 
 ## Future Plans
 
