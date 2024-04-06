@@ -142,8 +142,8 @@ const LiveTiming = () => {
             }
         };
 
-        const loadLiveFlagData = async () => {
-            const liveData = await getLiveFlag();
+        const loadLiveFlagData = async (session) => {
+            const liveData = await getLiveFlag(session);
             if (!liveData.error) {
                 setFlagData(liveData.flag);
             }
@@ -168,9 +168,9 @@ const LiveTiming = () => {
             setDriverDataInterval(driverDataID);
         }
 
-        loadLiveFlagData();
+        loadLiveFlagData(sessionType);
         if (!flagDataInterval) {
-            const flagDataID = setInterval(loadLiveFlagData, 40000);
+            const flagDataID = setInterval(loadLiveFlagData, 40000, sessionType);
             setFlagDataInterval(flagDataID);
         }
 

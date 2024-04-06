@@ -98,7 +98,7 @@ const LiveTimingTable = ({driverData, sessionType}) => {
                             </td>
                             <td key={`driver_${index}_laptime`}>
                                 {driver.laptime >= 0 ?
-                                    driver.laptime === 0 ? (<span className="font-f1-b">NO TIME</span>) : getLaptimeFromMillisecond(driver.laptime)
+                                    driver.laptime === 0 ? (<span className="font-f1-b">--</span>) : getLaptimeFromMillisecond(driver.laptime)
                                     :
                                     sessionType === "race"
                                     ?

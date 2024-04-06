@@ -67,9 +67,13 @@ async def getDriverLaptimes(driverNums, sortByFastest=False):
         lapResponses = await asyncio.gather(*tasks)
         
         if sortByFastest:
-            for driverData in lapResponses:
-                if len(driverData) > 0:
-                    driverData.sort(key=lambda lapData: lapData["lap_duration"] if lapData["lap_duration"] else math.inf, reverse=True)
+            for driverLapData in lapResponses:
+                if len(driverLapData) > 0:
+                    driverLapData.sort(key=lambda lapData: 
+                                            lapData["lap_duration"] 
+                                            if lapData["lap_duration"]
+                                            else float("inf"), 
+                                        reverse=True)
 
         return lapResponses
 
@@ -88,14 +92,15 @@ async def getDriverStints(driverNums):
         stintResponses = await asyncio.gather(*tasks)
         return stintResponses
 
-async def getFlag():
+async def getFlag(isQualifying=False):
     async with aiohttp.ClientSession() as session:
         chequeredUrl = f"{baseUrl}/race_control?session_key=latest&flag=CHEQUERED"
         chequeredData = await fetch(session, chequeredUrl)
 
         endTime = ""
         if len(chequeredData) > 0:
-            endTime = f"&date<={chequeredData[-1]['date']}"
+            if not isQualifying or (isQualifying and len(chequeredData) >= 3):
+                endTime = f"&date<={chequeredData[-1]['date']}"
         
         flagUrl = f"{baseUrl}/race_control?session_key=latest&category=Flag{endTime}"
         flagData = await fetch(session, flagUrl)
@@ -200,8 +205,8 @@ def getLiveDriverData(sessionType=""):
     
     return jsonify(liveData), status
 
-@live_timing_bp.route("/get_live_flag", methods=["GET"])
-def getLiveFlag():
+@live_timing_bp.route("/get_live_flag/<session>", methods=["GET"])
+def getLiveFlag(session="race"):
     targetFlags = ["GREEN", "CLEAR", "YELLOW", "DOUBLE YELLOW", "RED", "CHEQUERED"]
 
     liveData = {
@@ -210,9 +215,9 @@ def getLiveFlag():
     }
     status = 200
 
-    async def getLiveFlagAsync():
+    async def getLiveFlagAsync(isQualifying):
         try:
-            flagResponses = await getFlag()
+            flagResponses = await getFlag(isQualifying)
             
             flagCount = len(flagResponses) - 1
             while flagCount >= 0 and flagResponses[flagCount]["flag"] not in targetFlags:
@@ -226,11 +231,12 @@ def getLiveFlag():
         except:
             await asyncio.sleep(1)
     
-    def getLiveData():
-        asyncio.run(getLiveFlagAsync())
+    def getLiveData(session= "race"):
+        isQualifying = (session == "qualifying" or session == "sprintShootout")
+        asyncio.run(getLiveFlagAsync(isQualifying))
 
     try:
-        getLiveData()
+        getLiveData(session)
     except:
         liveData["error"] = True
         status = 400

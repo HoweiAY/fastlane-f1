@@ -20,9 +20,9 @@ export const getLiveDriverData = async (sessionType) => {
     }
 };
 
-export const getLiveFlag = async () => {
+export const getLiveFlag = async (session) => {
     try {
-        const response = await api.get("live_timing/get_live_flag");
+        const response = await api.get(`live_timing/get_live_flag/${session}`);
         if (response.status !== 200) {
             throw new Error(response.statusText);
         }
