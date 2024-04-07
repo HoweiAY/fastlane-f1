@@ -2,8 +2,6 @@ from urllib.request import urlopen
 from flask import Blueprint, jsonify
 import asyncio
 import aiohttp
-import threading
-import math
 
 live_timing_bp = Blueprint("live_timing", __name__)
 
@@ -22,11 +20,11 @@ async def getDrivers():
         driverData = await fetch(session, driverurl)
         return driverData
 
-async def getDriverPositions(driverNums):
+async def getDriverPositions(driverCount):
     urls = []
 
-    for driverNum in driverNums:
-        urls.append(f"{baseUrl}/position?session_key=latest&driver_number={driverNum}")
+    for position in range(1, driverCount + 1):
+        urls.append(f"{baseUrl}/position?session_key=latest&position={position}")
 
     async with aiohttp.ClientSession() as session:
         tasks = []
@@ -69,11 +67,7 @@ async def getDriverLaptimes(driverNums, sortByFastest=False):
         if sortByFastest:
             for driverLapData in lapResponses:
                 if len(driverLapData) > 0:
-                    driverLapData.sort(key=lambda lapData: 
-                                            lapData["lap_duration"] 
-                                            if lapData["lap_duration"]
-                                            else float("inf"), 
-                                        reverse=True)
+                    driverLapData.sort(key=lambda lapData: lapData["lap_duration"] if lapData["lap_duration"] else float("inf"), reverse=True)
 
         return lapResponses
 
@@ -137,7 +131,12 @@ def getLiveDriverData(sessionType=""):
         try:
             drivers = await getDrivers()
             driverNums = [driver["driver_number"] for driver in drivers]
-            posResponses = await getDriverPositions(driverNums)
+            driverCount = len(driverNums)
+
+            posResponses = await getDriverPositions(driverCount)
+            if len(posResponses) > 0:
+                posResponses.sort(key=lambda driverPosData: driverPosData[-1]["driver_number"])
+
             lapResponses = await getDriverLaptimes(driverNums)
             fastestLapResponses = await getDriverLaptimes(driverNums, sortByFastest=True)
             stintResponses = await getDriverStints(driverNums)

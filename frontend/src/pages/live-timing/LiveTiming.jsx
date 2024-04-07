@@ -122,7 +122,7 @@ const LiveTiming = () => {
     useEffect(() => {
         const loadLiveDriverData = async (sessionType) => {
             const liveData = await getLiveDriverData(sessionType);
-            if (!liveData.error) {
+            if (!liveData.error && liveData.standings.length > 0) {
                 setDriverData(liveData.standings);
             }
         };
@@ -150,7 +150,6 @@ const LiveTiming = () => {
         };
 
         const clearAllIntervals = () => {
-            console.log("Clearing intervals")
             if (driverDataInterval) clearInterval(driverDataInterval);
             if (flagDataInterval) clearInterval(flagDataInterval);
             if (safetyCarDataInterval) clearInterval(safetyCarDataInterval);
@@ -164,19 +163,19 @@ const LiveTiming = () => {
 
         loadLiveDriverData(sessionType);
         if (!driverDataInterval) {
-            const driverDataID = setInterval(loadLiveDriverData, 20000, sessionType);
+            const driverDataID = setInterval(loadLiveDriverData, 35000, sessionType);
             setDriverDataInterval(driverDataID);
         }
 
         loadLiveFlagData(sessionType);
         if (!flagDataInterval) {
-            const flagDataID = setInterval(loadLiveFlagData, 40000, sessionType);
+            const flagDataID = setInterval(loadLiveFlagData, 45000, sessionType);
             setFlagDataInterval(flagDataID);
         }
 
         checkSafetyCar();
         if (!safetyCarDataInterval) {
-            const safetyCarDataID = setInterval(checkSafetyCar, 40000, flagData);
+            const safetyCarDataID = setInterval(checkSafetyCar, 45000, flagData);
             setSafetyCarDataInterval(safetyCarDataID);
         }
 

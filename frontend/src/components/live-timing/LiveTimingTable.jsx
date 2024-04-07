@@ -72,7 +72,7 @@ const LiveTimingTable = ({driverData, sessionType}) => {
                     <tr key="table_col">
                         {tableColumns.map((columnText) => {
                             if ((sessionType === "race" || sessionType === "sprint") && (columnText === tableColumns[3])) return;
-                            if ((sessionType !== "race" || sessionType !== "sprint") && (columnText === tableColumns[4] || columnText === tableColumns[5])) return;
+                            if ((sessionType !== "race") && (columnText === "Gap" || columnText === tableColumns[5])) return;
                             return (
                                 <th key={columnText} className="py-2">
                                     {columnText}
@@ -97,18 +97,14 @@ const LiveTimingTable = ({driverData, sessionType}) => {
                                 {driver.name}
                             </td>
                             <td key={`driver_${index}_laptime`}>
-                                {driver.laptime >= 0 ?
-                                    driver.laptime === 0 ? (<span className="font-f1-b">--</span>) : getLaptimeFromMillisecond(driver.laptime)
-                                    :
-                                    sessionType === "race"
-                                    ?
-                                    (<span className="font-f1-b text-red-600">RETIRED</span>)
+                                {driver.laptime > 0 ?
+                                    getLaptimeFromMillisecond(driver.laptime)
                                     :
                                     driver.outLap 
                                     ? 
                                     (<span className="font-f1-b">OUT LAP</span>)
                                     :
-                                    (<span className="font-f1-b">NO TIME</span>)
+                                    (<span className="font-f1-b">--</span>)
                                 }
                             </td>
                             <td key={`driver_${index}_gap`} className={sessionType !== "race" ? "hidden" : ""}>
