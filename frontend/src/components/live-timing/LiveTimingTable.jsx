@@ -72,7 +72,7 @@ const LiveTimingTable = ({driverData, sessionType}) => {
                     <tr key="table_col">
                         {tableColumns.map((columnText) => {
                             if ((sessionType === "race" || sessionType === "sprint") && (columnText === tableColumns[3])) return;
-                            if ((sessionType !== "race") && (columnText === "Gap" || columnText === tableColumns[5])) return;
+                            if ((sessionType !== "race" && sessionType !== "sprint") && (columnText === tableColumns[4] || columnText === tableColumns[5])) return;
                             return (
                                 <th key={columnText} className="py-2">
                                     {columnText}
