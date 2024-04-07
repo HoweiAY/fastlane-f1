@@ -4,6 +4,7 @@ import { IconContext } from "react-icons";
 import { MdArrowOutward } from "react-icons/md";
 
 import EventCarousel from "../../components/event/EventCarousel";
+import EventLiveCard from "../../components/event/EventLiveCard";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 
 import { getNextEventRound } from "../../utils/event_utils";
@@ -11,6 +12,7 @@ import { getSchedule } from "../../api/season_schedule";
 import heroBannerImage from "../../assets/images/common/home_banner_1.png";
 import resultsDescImage from "../../assets/images/common/home_results_desc_img_1.png";
 import driversTeamsDescImage from "../../assets/images/common/home_drivers_teams_desc_img_1.png";
+import liveTimingDescImage from "../../assets/images/common/home_live_timing_desc_img_1.png";
 
 const ScheduleDescription = ({onClick}) => {
     return (
@@ -79,6 +81,19 @@ const DriversTeamsDescription = ({onClick}) => {
     )
 };
 
+const LiveTimingDescription = () => {
+    return (
+        <div className="w-[75%] max-lg:w-[85%] text-white text-center">
+            <h2 className="border-b-4 max-md:border-b-2 border-red-600 px-4 pb-2 max-md:pb-1 font-f1-bl text-4xl max-md:text-xl max-lg:text-2xl">
+                Feel the adrenaline of the on-track action live
+            </h2>
+            <p className="px-2 py-3 max-md:pt-1 text-lg max-md:text-sm max-lg:text-base">
+                Experience the exhilarating racing action while staying up-to-date with live timing information of the session.
+            </p>
+        </div>
+    )
+};
+
 const Home = () => {
     const navigate = useNavigate();
 
@@ -109,6 +124,10 @@ const Home = () => {
 
     const handleSelectDriverTeam = (path) => {
         navigate(`${path}`);
+    };
+
+    const handleSelectLiveTiming = () => {
+        navigate("/live-timing")
     };
 
     return (
@@ -177,6 +196,21 @@ const Home = () => {
                 >
                     <div className="flex flex-row justify-end items-center py-14 h-[30rem] max-md:h-96 max-lg:h-[27rem] bg-gradient-to-l from-gray-800 max-md:from-red-600 via-50% max-md:via-60% via-gray-800 max-md:via-red-600">
                         <DriversTeamsDescription onClick={handleSelectDriverTeam} />
+                    </div>
+                </section>
+                <section
+                    className="bg-cover bg-center bg-no-repeat"
+                    style={{
+                        "backgroundImage": `url(${liveTimingDescImage})`
+                    }}
+                >
+                    <div className="flex flex-col justify-center items-center p-10 min-h-[34rem] max-md:min-h-[28rem] max-lg:min-h-[30rem] bg-black bg-opacity-50">
+                        <LiveTimingDescription />
+                        <EventLiveCard 
+                            fullSchedule={fullSchedule}
+                            onClickLiveTiming={() => handleSelectLiveTiming()}
+                            onClickSchedule={() => handleSelectViewSchedule()}
+                        />
                     </div>
                 </section>
             </div>
