@@ -5,7 +5,7 @@ const githubLink = "https://github.com/HoweiAY/fastlane-f1";
 
 const Footer = () => {
     return (
-        <footer className="flex flex-row justify-between items-center p-8 max-md:px-4 h-14 bg-gray-800 text-base max-md:text-sm text-white">
+        <footer className="flex flex-row justify-between items-center p-8 max-md:px-4 mt-auto max-h-14 bg-gray-800 text-base max-md:text-sm text-white">
             <p>
                 <span className="font-f1-b">FastLane</span> by HoweiAY
             </p>

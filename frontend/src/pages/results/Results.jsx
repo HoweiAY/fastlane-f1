@@ -21,6 +21,10 @@ const Results = () => {
     const [championshipResultTab, setChampionshipResultTab] = useState(championshipResultTabs[0]);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
         const loadDriverStandings = async (year) => {
             setDriverStandings(null);
             const standings = await getDriverStandings(year);

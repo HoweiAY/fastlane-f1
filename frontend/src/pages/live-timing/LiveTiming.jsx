@@ -54,6 +54,10 @@ const LiveTiming = () => {
     const [safetyCarDataInterval, setSafetyCarDataInterval] = useState(null);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
         const loadSchedule = async (year) => {
             const schedule = await getSchedule(year);
             if (!schedule.error) {
@@ -187,7 +191,7 @@ const LiveTiming = () => {
     };
 
     return (
-        <main className="pb-10 min-h-[90vh] max-md:min-h-[70vh] bg-gray-800 text-white">
+        <main className="pb-10 min-h-[90vh] bg-gray-800 text-white">
             <header 
                 className="w-full h-64 max-md:h-48 bg-cover bg-center bg-no-repeat"
                 style={{
@@ -262,7 +266,7 @@ const LiveTiming = () => {
                     </div>
                 )
             ) : (
-                <div className="flex flex-row justify-center items-center w-full h-[400px] max-md:h-[300px]">
+                <div className="flex flex-row justify-center items-center w-full h-full">
                     <LoadingSpinner width={"100"} height={"100"} color={"#FFFFFF"} />
                 </div>
             )}

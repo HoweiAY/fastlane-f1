@@ -9,12 +9,14 @@ const MainContainer = () => {
     return (
         <>
         <TopNavBar />
-        <div>
+        
             <ErrorBoundary key={location.pathname}>
-                <Outlet />
-                <Footer />
+                <div className="flex flex-col min-h-[90vh]">
+                    <Outlet />
+                    <Footer />
+                </div>
             </ErrorBoundary>
-        </div>
+        
         </>
     );
 };

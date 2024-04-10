@@ -15,6 +15,10 @@ const Event = () => {
     const [circuitImgSrc, setCircuitImgSrc] = useState("");
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
         const eventRound = round;
         const loadEvent = async (year, round) => {
             const event = await getEventInfo(year, round);
