@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { IconContext } from "react-icons";
 import { MdArrowOutward } from "react-icons/md";
+import { BiSolidStopwatch } from "react-icons/bi";
+import { IoCalendarSharp } from "react-icons/io5";
+import { GiPodium, GiFullMotorcycleHelmet, GiF1Car } from "react-icons/gi";
 
 import EventCarousel from "../../components/event/EventCarousel";
 import EventLiveCard from "../../components/event/EventLiveCard";
@@ -211,6 +214,55 @@ const Home = () => {
                             onClickLiveTiming={() => handleSelectLiveTiming()}
                             onClickSchedule={() => handleSelectViewSchedule()}
                         />
+                    </div>
+                </section>
+                <section className="px-[8%] py-16 max-lg:px-[6%] max-md:px-[4%] max-md:py-12 bg-gray-100">
+                    <div className="mx-2 mt-2">
+                        <h2 className="font-f1-bl text-4xl max-lg:text-2xl">
+                            Begin your F1 discovery journey
+                        </h2>
+                        <p className="pt-1 pb-2 text-lg max-md:text-sm max-lg:text-base">
+                            Start exploring the magic of FORMULA 1 today with everything FastLane has to offer.
+                        </p>
+                    </div>
+                    <div className="flex flex-row justify-evenly items-baseline flex-wrap border-t-8 max-md:border-t-4 border-e-8 max-md:border-e-4 border-black rounded-tr-xl py-8 max-md:py-4 text-lg max-md:text-sm max-lg:text-base text-center">
+                        <IconContext.Provider value={{ style: { height: "auto", width:"62%", margin: "auto" } }} >
+                            <div 
+                                className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
+                                onClick={() => handleSelectLiveTiming()}
+                                >
+                                <BiSolidStopwatch />
+                                <p className="p-2">Live Timing</p>
+                            </div>
+                            <div 
+                                className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
+                                onClick={() => handleSelectViewSchedule()}
+                                >
+                                <IoCalendarSharp />
+                                <p className="p-2">Schedule</p>
+                            </div>
+                            <div 
+                                className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
+                                onClick={() => handleSelectResults()}
+                                >
+                                <GiPodium />
+                                <p className="p-2">Results</p>
+                            </div>
+                            <div 
+                                className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
+                                onClick={() => handleSelectDriverTeam("drivers")}
+                                >
+                                <GiFullMotorcycleHelmet />
+                                <p className="p-2">Drivers</p>
+                            </div>
+                            <div 
+                                className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
+                                onClick={() => handleSelectDriverTeam("teams")}
+                                >
+                                <GiF1Car />
+                                <p className="p-2">Teams</p>
+                            </div>
+                        </IconContext.Provider>
                     </div>
                 </section>
             </div>
