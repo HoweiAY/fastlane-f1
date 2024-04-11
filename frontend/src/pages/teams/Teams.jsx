@@ -1,6 +1,7 @@
+import UnfinishedPage from "../error/UnfinishedPage";
 const Teams = () => {
     return (
-        <h1>Teams</h1>
+        <UnfinishedPage />
     );
 };
 

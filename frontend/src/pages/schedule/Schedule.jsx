@@ -41,7 +41,7 @@ const Schedule = () => {
     }
 
     return (
-        <main className="mb-10">
+        <main className="mb-10 min-h-[90vh]">
             <header className="flex flex-col justify-center items-center mt-7 mx-7">
                 <h1 className="md:rounded-bl-3xl border-b-8 max-md:border-b-2 max-lg:border-b-4 md:border-s-4 lg:border-s-8 border-solid border-red-600 max-md:border-gray-800 px-6 py-4 font-f1-bl text-5xl max-md:text-3xl max-lg:text-4xl text-center">
                     Full FORMULA 1 Schedule {season}
