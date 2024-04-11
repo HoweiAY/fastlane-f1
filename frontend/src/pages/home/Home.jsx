@@ -178,6 +178,7 @@ const Home = () => {
                         <ScheduleDescription onClick={() => handleSelectViewSchedule()} />
                     </div>
                 </section>
+
                 <section className="max-md:hidden bg-gray-100 mt-12">
                     <div className="flex flex-row justify-between items-center ps-10 max-lg:ps-5 h-[30rem] max-lg:h-[27rem]">
                         <ResultDescription onClick={() => handleSelectResults()} />
@@ -196,6 +197,7 @@ const Home = () => {
                 >
                     <ResultDescription onClick={() => handleSelectResults()} />
                 </section>
+
                 <section
                     className="bg-cover bg-left bg-no-repeat"
                     style={{
@@ -206,6 +208,7 @@ const Home = () => {
                         <DriversTeamsDescription onClick={handleSelectDriverTeam} />
                     </div>
                 </section>
+
                 <section
                     className="bg-cover bg-center bg-no-repeat"
                     style={{
@@ -221,13 +224,14 @@ const Home = () => {
                         />
                     </div>
                 </section>
+
                 <section className="px-[8%] py-16 max-lg:px-[6%] max-md:px-[4%] max-md:py-12 bg-gray-100">
                     <div className="mx-2 mt-2">
                         <h2 className="font-f1-bl text-4xl max-lg:text-2xl">
                             Begin your F1 discovery journey
                         </h2>
                         <p className="pt-1 pb-2 text-lg max-md:text-sm max-lg:text-base">
-                            Start exploring the magic of FORMULA 1 today with everything FastLane has to offer.
+                            Start exploring the world of FORMULA 1 with FastLane today.
                         </p>
                     </div>
                     <div className="flex flex-row justify-evenly items-baseline flex-wrap border-t-8 max-md:border-t-4 border-e-8 max-md:border-e-4 border-black rounded-tr-xl py-8 max-md:py-4 text-lg max-md:text-sm max-lg:text-base text-center">

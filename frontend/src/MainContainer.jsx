@@ -10,12 +10,12 @@ const MainContainer = () => {
         <>
         <TopNavBar />
         
-            <ErrorBoundary key={location.pathname}>
-                <div className="flex flex-col min-h-[90vh]">
-                    <Outlet />
-                    <Footer />
-                </div>
-            </ErrorBoundary>
+        <ErrorBoundary key={location.pathname}>
+            <div className="flex flex-col min-h-[90vh]">
+                <Outlet />
+                <Footer />
+            </div>
+        </ErrorBoundary>
         
         </>
     );

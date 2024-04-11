@@ -143,7 +143,7 @@ const EventResult = () => {
                 <header className="flex flex-row justify-start items-center mx-[5%] my-20 max-md:mt-8 max-md:mb-6 max-lg:mb-12 w-[90%]">
                     <div className="w-[95%] max-md:w-full min-w-[58rem] max-md:min-w-80 max-lg:min-w-[40rem]">
                         <h1 className="mb-4 ps-4 max-md:mb-2 max-lg:mb-3 font-f1-w text-4xl max-md:text-xl max-lg:text-3xl">
-                            Round {`${round}`} <span className={`border rounded-sm ms-5 max-md:ms-2 max-lg:ms-3 fi fi-${countryCode}`}></span>
+                            Round {`${round}`} <span className={`border rounded-md ms-5 max-md:ms-2 max-lg:ms-3 fi fi-${countryCode}`}></span>
                         </h1>
                         <h1 className="border-t-8 border-s-8 border-red-600 rounded-tl-3xl ps-5 pe-2 py-3 max-md:ps-3 max-md:py-2 text-3xl max-sm:text-base max-md:text-lg max-lg:text-xl whitespace-break-spaces">
                             {event.eventName}
