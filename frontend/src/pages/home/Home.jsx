@@ -97,6 +97,33 @@ const LiveTimingDescription = () => {
     )
 };
 
+const DiscoveryList = () => {
+    const pageIcons = [<BiSolidStopwatch />, <IoCalendarSharp />, <GiPodium />, <GiFullMotorcycleHelmet />, <GiF1Car />];
+    const clickHandlers = [
+        () => handleSelectLiveTiming(),
+        () => handleSelectViewSchedule(),
+        () => handleSelectResults(),
+        () => handleSelectDriverTeam("drivers"),
+        () => handleSelectDriverTeam("teams")
+    ];
+
+    return (
+        <div className="flex flex-row justify-evenly items-baseline flex-wrap border-t-8 max-md:border-t-4 border-e-8 max-md:border-e-4 border-black rounded-tr-xl py-8 max-md:py-4 text-lg max-md:text-sm max-lg:text-base text-center">
+            {pageIcons.map((pageIcon, index) => (
+                <div 
+                    className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
+                    onClick={clickHandlers[index]}
+                >
+                        <IconContext.Provider value={{ style: { height: "auto", width:"60%", margin: "auto" } }} >
+                            {pageIcon}
+                        </IconContext.Provider>
+                    <p className="p-2">Live Timing</p>
+                </div>
+            ))}
+        </div>
+    )
+};
+
 const Home = () => {
     const navigate = useNavigate();
 
@@ -234,45 +261,7 @@ const Home = () => {
                             Start exploring the world of FORMULA 1 with FastLane today.
                         </p>
                     </div>
-                    <div className="flex flex-row justify-evenly items-baseline flex-wrap border-t-8 max-md:border-t-4 border-e-8 max-md:border-e-4 border-black rounded-tr-xl py-8 max-md:py-4 text-lg max-md:text-sm max-lg:text-base text-center">
-                        <IconContext.Provider value={{ style: { height: "auto", width:"62%", margin: "auto" } }} >
-                            <div 
-                                className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
-                                onClick={() => handleSelectLiveTiming()}
-                                >
-                                <BiSolidStopwatch />
-                                <p className="p-2">Live Timing</p>
-                            </div>
-                            <div 
-                                className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
-                                onClick={() => handleSelectViewSchedule()}
-                                >
-                                <IoCalendarSharp />
-                                <p className="p-2">Schedule</p>
-                            </div>
-                            <div 
-                                className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
-                                onClick={() => handleSelectResults()}
-                                >
-                                <GiPodium />
-                                <p className="p-2">Results</p>
-                            </div>
-                            <div 
-                                className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
-                                onClick={() => handleSelectDriverTeam("drivers")}
-                                >
-                                <GiFullMotorcycleHelmet />
-                                <p className="p-2">Drivers</p>
-                            </div>
-                            <div 
-                                className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
-                                onClick={() => handleSelectDriverTeam("teams")}
-                                >
-                                <GiF1Car />
-                                <p className="p-2">Teams</p>
-                            </div>
-                        </IconContext.Provider>
-                    </div>
+                    <DiscoveryList />
                 </section>
             </div>
         </main>
