@@ -8,18 +8,20 @@ import LoadingSpinner from "../../components/common/LoadingSpinner";
 import { getEventInfo } from "../../api/gp_event";
 
 const Event = () => {
-    const { season, round } = useParams();
+    const { season, round, location } = useParams();
 
     const [event, setEvent] = useState(null);
     const [eventBannerSrc, setEventBannerSrc] = useState("");
     const [circuitImgSrc, setCircuitImgSrc] = useState("");
 
     useEffect(() => {
+        document.title = "Event Schedule - FastLane";
         window.scrollTo(0, 0);
     }, []);
 
     useEffect(() => {
         const eventRound = round;
+        document.title = `${location} ${season} Schedule - FastLane`;
         const loadEvent = async (year, round) => {
             const event = await getEventInfo(year, round);
             if (!event.error) {

@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
 
 import errorIcon from "../../assets/icons/error_page/error.svg";
+import { useEffect } from "react";
 
 const Error = ({onClick}) => {
+    useEffect(() => {
+        document.title = "Error - FastLane";
+    }, []);
+
     return (
         <div className="m-8">
             <div className="flex flex-row max-md:flex-col justify-center items-center h-[35rem] max-lg:h-[30rem] max-md:h-full">

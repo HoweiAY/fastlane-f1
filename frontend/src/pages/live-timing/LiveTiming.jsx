@@ -54,6 +54,7 @@ const LiveTiming = () => {
     const [safetyCarDataInterval, setSafetyCarDataInterval] = useState(null);
 
     useEffect(() => {
+        document.title = "Live Timing - FastLane";
         window.scrollTo(0, 0);
     }, []);
 

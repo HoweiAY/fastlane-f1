@@ -16,6 +16,7 @@ const Schedule = () => {
     const [fullSchedule, setFullSchedule] = useState(null);
 
     useEffect(() => {
+        document.title = "Schedule - FastLane";
         window.scrollTo(0, 0);
     }, []);
 

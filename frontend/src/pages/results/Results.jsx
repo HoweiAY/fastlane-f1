@@ -21,6 +21,7 @@ const Results = () => {
     const [championshipResultTab, setChampionshipResultTab] = useState(championshipResultTabs[0]);
 
     useEffect(() => {
+        document.title = "Results - FastLane";
         window.scrollTo(0, 0);
     }, []);
 

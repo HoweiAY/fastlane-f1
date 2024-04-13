@@ -25,6 +25,7 @@ const EventResult = () => {
     const [reloadResult, setReloadResult] = useState(false);
 
     useEffect(() => {
+        document.title = "Event Result - FastLane";
         window.scrollTo(0, 0);
     }, []);
 
@@ -41,6 +42,7 @@ const EventResult = () => {
 
     useEffect(() => {
         if (event) {
+            document.title = `${event.country} ${season} Result - FastLane`;
             setCountryCode(countryCodes[event.country]?.toLowerCase() || "xx");
             switch (event.country) {
                 case "Abu Dhabi":
