@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import { IconContext } from "react-icons";
 import { GoChevronLeft } from "react-icons/go";
@@ -32,15 +31,7 @@ const PrevEventArrow = (props) => {
 }
 
 const EventCarousel = ({fullSchedule, round}) => {
-    const navigate = useNavigate();
-
     const [season, setSeason] = useState(new Date().getUTCFullYear());
-
-    const handleSelectEvent = (event) => {
-        const round = event.round;
-        const location = event.location.replace(/ /g, '_');
-        navigate(`/event/${season}/${round}/${location}`);
-    };
 
     const settings = {
         arrows: true,
@@ -48,7 +39,7 @@ const EventCarousel = ({fullSchedule, round}) => {
         lazyLoad: true,
         infinite: true,
         centerMode: true,
-        centerPadding: "10px",
+        centerPadding: "6px",
         adaptiveHeight: true,
         speed: 500,
         slidesToShow: 1,
@@ -64,7 +55,6 @@ const EventCarousel = ({fullSchedule, round}) => {
                 <EventCard 
                     key={event.dateFormatted}
                     event={event} 
-                    onClick={(event) => handleSelectEvent(event)}
                     stylized={false}
                 />
             )}

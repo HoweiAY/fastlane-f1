@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import LoadingSpinner from "../common/LoadingSpinner";
 
 import { isEventActive } from "../../utils/event_utils";
 
-const EventLiveCard = ({fullSchedule, onClickLiveTiming, onClickSchedule}) => {
+const EventLiveCard = ({fullSchedule}) => {
     const [event, setEvent] = useState(null);
 
     useEffect(() => {
@@ -33,12 +34,12 @@ const EventLiveCard = ({fullSchedule, onClickLiveTiming, onClickSchedule}) => {
                             <p className="border-t-2 ps-1 pe-3 pt-1 w-fit text-lg max-md:text-sm max-lg:text-base">
                                 {event.eventName}
                             </p>
-                            <button 
+                            <Link 
                                 className="border border-red-600 rounded-lg mx-1 my-3 max-md:mb-1 p-2 text-white max-md:text-sm bg-red-600"
-                                onClick={onClickLiveTiming}
+                                to="/live-timing"
                             >
                                 Live Timing {">>"}
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 ) : (
@@ -49,12 +50,12 @@ const EventLiveCard = ({fullSchedule, onClickLiveTiming, onClickSchedule}) => {
                         <p className="border-t-2 border-white px-2 py-1 text-base max-lg:text-sm text-center">
                             Live timing will be available when a session starts.
                         </p>
-                        <button 
+                        <Link 
                             className="border border-red-600 rounded-lg mx-1 mt-4 mb-3 max-md:mt-2 p-2 text-white max-md:text-sm bg-red-600"
-                            onClick={onClickSchedule}
+                            to="/schedule"
                         >
                             View Schedule {">>"}
-                        </button>
+                        </Link>
                     </div>
                 )
         ) : (

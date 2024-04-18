@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import LiveTimingTable from "../../components/live-timing/LiveTimingTable";
@@ -241,12 +241,12 @@ const LiveTiming = () => {
                                 <p className="px-2 text-base max-md:text-sm text-center">
                                     Please come back again when a session starts.
                                 </p>
-                                <button 
+                                <Link 
                                     className="border border-red-600 rounded-lg my-6 p-2 max-md:text-sm bg-red-600"
-                                    onClick={() => handleSelectSchedule()}
+                                    to="/schedule"
                                 >
                                     View Schedule {">>"}
-                                </button>
+                                </Link>
                             </div>
                         )}
                     </div> 
@@ -258,12 +258,12 @@ const LiveTiming = () => {
                         <p className="px-2 text-base max-md:text-sm text-center">
                             Please come back again when an event starts.
                         </p>
-                        <button 
+                        <Link 
                             className="border border-red-600 rounded-lg my-6 p-2 max-md:text-sm bg-red-600"
-                            onClick={() => handleSelectSchedule()}
+                            to="/schedule"
                         >
                             View Schedule {">>"}
-                        </button>
+                        </Link>
                     </div>
                 )
             ) : (

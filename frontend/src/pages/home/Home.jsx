@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IconContext } from "react-icons";
 import { MdArrowOutward } from "react-icons/md";
 import { BiSolidStopwatch } from "react-icons/bi";
@@ -17,40 +17,40 @@ import resultsDescImage from "../../assets/images/common/home_results_desc_img_1
 import driversTeamsDescImage from "../../assets/images/common/home_drivers_teams_desc_img_1.png";
 import liveTimingDescImage from "../../assets/images/common/home_live_timing_desc_img_1.png";
 
-const ScheduleDescription = ({onClick}) => {
+const ScheduleDescription = () => {
     return (
         <div className="md:border-t-4 md:border-e-4 md:border-gray-800 md:rounded-tr-lg p-4 max-md:text-center">
             <h2 className="max-md:border-b-2 max-md:border-gray-800 px-2 max-md:pb-2 font-f1-bl text-4xl max-lg:text-2xl">
                 Never miss a race weekend
             </h2>
-            <p className="px-2 py-3 max-md:pt-3 text-lg max-md:text-sm max-lg:text-base">
+            <p className="mb-2 px-2 py-3 max-md:pt-3 text-lg max-md:text-sm max-lg:text-base">
                 Stay updated on the current FORMULA 1 event calendar or revisit race schedules of past seasons.
             </p>
-            <button 
+            <Link 
                 className="max-md:hidden border border-red-600 rounded-lg m-2 p-2 text-white max-md:text-sm bg-red-600"
-                onClick={onClick}
+                to="/schedule"
             >
                 View Schedule {">>"}
-            </button>
+            </Link>
         </div>
     )
 };
 
-const ResultDescription = ({onClick}) => {
+const ResultDescription = () => {
     return (
         <div className="md:border-t-4 md:border-s-4 md:border-gray-800 md:rounded-tl-lg p-4 max-sm:px-10 max-md:px-16 max-md:py-16 md:mx-10 my-auto w-2/5 max-md:w-full max-md:text-center max-md:bg-black max-md:bg-opacity-60">
             <h2 className="max-md:border-b-2 max-md:border-red-600 px-2 max-md:pb-2 font-f1-bl text-4xl max-lg:text-2xl">
                 Discover the thrills and triumphs of each race
             </h2>
-            <p className="px-2 py-3 max-md:pt-3 text-lg max-md:text-sm max-lg:text-base">
+            <p className="mb-2 px-2 py-3 max-md:pt-3 text-lg max-md:text-sm max-lg:text-base">
                 Get up to speed with your favourite drivers' and teams' standings, or relive the excitement of previous races with comprehensive race results.
             </p>
-            <button 
+            <Link 
                 className="border md:border-2 border-black max-md:border-gray-900 rounded-lg m-2 px-4 py-2 text-black max-md:text-white max-md:text-sm bg-slate-200 max-md:bg-gray-700"
-                onClick={onClick}
+                to="/results"
             >
                 Results {">>"}
-            </button>
+            </Link>
         </div>
     )
 };
@@ -66,18 +66,18 @@ const DriversTeamsDescription = ({onClick}) => {
             </p>
             <div className="flex flex-col justify-center items-start px-2 pb-1 max-md:ps-0 font-f1-b text-base max-lg:text-sm">
                 <IconContext.Provider value={ { style: { display: "inline" } } }>       
-                    <button
+                    <Link
                         className="border-b-2 border-s-2 border-red-600 max-md:border-white rounded-bl-md ps-1 pb-1 mx-1 my-2 w-32 max-md:w-28 text-left hover:w-36 max-md:hover:w-32 transition-all duration-300"
-                        onClick={() => onClick("drivers")}
+                        to="/drivers"
                     >
                         <MdArrowOutward /> Drivers
-                    </button>
-                    <button
+                    </Link>
+                    <Link
                         className="border-b-2 border-s-2 border-red-600 max-md:border-white rounded-bl-md ps-1 pb-1 mx-1 my-2 w-32 max-md:w-28 text-left hover:w-36 max-md:hover:w-32 transition-all duration-300"
-                        onClick={() => onClick("teams")}
+                        to="/teams"
                     >
                         <MdArrowOutward /> Teams
-                    </button>
+                    </Link>
                 </IconContext.Provider>
             </div>
         </div>
@@ -99,41 +99,39 @@ const LiveTimingDescription = () => {
 
 const DiscoveryList = () => {
     const pageIcons = [<BiSolidStopwatch />, <IoCalendarSharp />, <GiPodium />, <GiFullMotorcycleHelmet />, <GiF1Car />];
-    const clickHandlers = [
-        () => handleSelectLiveTiming(),
-        () => handleSelectViewSchedule(),
-        () => handleSelectResults(),
-        () => handleSelectDriverTeam("drivers"),
-        () => handleSelectDriverTeam("teams")
+
+    const pages = [
+        {name: "Live Timing", path: "/live-timing"}, 
+        {name: "Schedule", path: "/schedule"},
+        {name: "Results", path: "/results"},
+        {name: "Drivers", path: "/drivers"},
+        {name: "Teams", path: "/teams"},
     ];
 
     return (
-        <div className="flex flex-row justify-evenly items-baseline flex-wrap border-t-8 max-md:border-t-4 border-e-8 max-md:border-e-4 border-black rounded-tr-xl py-8 max-md:py-4 text-lg max-md:text-sm max-lg:text-base text-center">
+        <div className="flex flex-row justify-evenly items-stretch flex-wrap border-t-8 max-md:border-t-4 border-e-8 max-md:border-e-4 border-black rounded-tr-xl py-8 max-md:py-4 text-lg max-md:text-sm max-lg:text-base text-center">
             {pageIcons.map((pageIcon, index) => (
-                <div 
-                    className="rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
-                    onClick={clickHandlers[index]}
+                <Link 
+                    className="flex flex-col justify-end items-center rounded-xl p-8 max-md:p-3 max-lg:p-6 hover:bg-gray-200 hover:scale-105 hover:cursor-pointer transition-all duration-200"
+                    to={pages[index].path}
                 >
-                        <IconContext.Provider value={{ style: { height: "auto", width:"60%", margin: "auto" } }} >
-                            {pageIcon}
-                        </IconContext.Provider>
-                    <p className="p-2">Live Timing</p>
-                </div>
+                    <IconContext.Provider value={{ style: { height: "auto", width:"60%", margin: "auto" } }} >
+                        {pageIcon}
+                    </IconContext.Provider>
+                    <p className="p-2">{pages[index].name}</p>
+                </Link>
             ))}
         </div>
     )
 };
 
 const Home = () => {
-    const navigate = useNavigate();
-
     const [season, setSeason] = useState(new Date().getUTCFullYear());
     const [fullSchedule, setFullSchedule] = useState(null);
     const [round, setRound] = useState(null);
 
     useEffect(() => {
         document.title = "FastLane";
-        window.scrollTo(0, 0);
     }, []);
     
     
@@ -149,22 +147,6 @@ const Home = () => {
         };
         loadSchedule(season);
     }, [season]);
-
-    const handleSelectViewSchedule = () => {
-        navigate("/schedule");
-    };
-
-    const handleSelectResults = () => {
-        navigate("/results");
-    };
-
-    const handleSelectDriverTeam = (path) => {
-        navigate(`${path}`);
-    };
-
-    const handleSelectLiveTiming = () => {
-        navigate("/live-timing")
-    };
 
     return (
         <main className="mb-0">
@@ -187,29 +169,29 @@ const Home = () => {
             </header>
 
             <div>
-                <section className="flex flex-row max-md:flex-col justify-evenly items-center mx-5 my-8">
+                <section className="flex flex-row max-md:flex-col justify-evenly items-center mx-5 my-8 min-h-96">
                     <div className="md:hidden w-[95%]">
-                        <ScheduleDescription onClick={() => handleSelectViewSchedule()} />
+                        <ScheduleDescription />
                     </div>
                     <div className="w-1/2 max-w-[30rem] max-sm:w-4/5 max-md:w-8/12 max-lg:w-[45%] mx-8 px-8">
                         {fullSchedule && <EventCarousel fullSchedule={fullSchedule} round={round} />}
                         {!fullSchedule && <LoadingSpinner width={"100"} height={"100"} color={"#DC2626"} />}
                     </div>
-                    <button 
+                    <Link 
                         className="md:hidden border border-red-600 rounded-lg my-4 p-2 text-white max-md:text-sm bg-red-600"
-                        onClick={() => handleSelectViewSchedule()}
+                        to="/schedule"
                     >
                         View Schedule {">>"}
-                    </button>
+                    </Link>
 
                     <div className="max-md:hidden w-1/2">
-                        <ScheduleDescription onClick={() => handleSelectViewSchedule()} />
+                        <ScheduleDescription />
                     </div>
                 </section>
 
                 <section className="max-md:hidden bg-gray-100 mt-12">
                     <div className="flex flex-row justify-between items-center ps-10 max-lg:ps-5 h-[30rem] max-lg:h-[27rem]">
-                        <ResultDescription onClick={() => handleSelectResults()} />
+                        <ResultDescription />
                         <img
                             className="w-1/2 h-full object-cover"
                             src= {resultsDescImage}
@@ -223,7 +205,7 @@ const Home = () => {
                         "backgroundImage": `url(${resultsDescImage})`
                     }}
                 >
-                    <ResultDescription onClick={() => handleSelectResults()} />
+                    <ResultDescription />
                 </section>
 
                 <section
@@ -233,7 +215,7 @@ const Home = () => {
                     }}
                 >
                     <div className="flex flex-row justify-end items-center py-14 h-[30rem] max-md:h-96 max-lg:h-[27rem] bg-gradient-to-l from-gray-800 max-md:from-red-600 via-50% max-md:via-60% via-gray-800 max-md:via-red-600">
-                        <DriversTeamsDescription onClick={handleSelectDriverTeam} />
+                        <DriversTeamsDescription />
                     </div>
                 </section>
 
@@ -245,11 +227,7 @@ const Home = () => {
                 >
                     <div className="flex flex-col justify-center items-center p-10 min-h-[34rem] max-md:min-h-[28rem] max-lg:min-h-[30rem] bg-black bg-opacity-50">
                         <LiveTimingDescription />
-                        <EventLiveCard 
-                            fullSchedule={fullSchedule}
-                            onClickLiveTiming={() => handleSelectLiveTiming()}
-                            onClickSchedule={() => handleSelectViewSchedule()}
-                        />
+                        <EventLiveCard fullSchedule={fullSchedule} />
                     </div>
                 </section>
 

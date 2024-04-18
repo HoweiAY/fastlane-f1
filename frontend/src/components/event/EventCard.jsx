@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import { countryCodes } from "../../utils/country_code";
 
-const EventCard = ({event, onClick, stylized}) => {
+const EventCard = ({event, stylized}) => {
+    const [season, setSeason] = useState(new Date().getUTCFullYear());
     const [countryCode, setCountryCode] = useState("xx");
     const [circuitImgSrc, setCircuitImgSrc] = useState("");
     
@@ -37,9 +39,9 @@ const EventCard = ({event, onClick, stylized}) => {
     }, [event])
 
     return (
-        <div 
+        <Link 
             className={`col-span-1 min-w-52 max-lg:min-w-48 h-full border rounded-lg mx-3 bg-gray-50 hover:cursor-pointer z-0 ${!stylized && "shadow-sm"} ${stylized && "shadow-md shadow-gray-300 hover:scale-105 transition-all duration-500"}`}
-            onClick={() => onClick(event)}
+            to={`/event/${season}/${event.round}/${event.location.replace(/ /g, '_')}`}
         >
             <h2 className="mx-4 mt-2 font-f1-w text-base whitespace-nowrap overflow-hidden">
                 {event.format !== "testing" ? `ROUND ${event.round}` : "TESTING"}
@@ -70,7 +72,7 @@ const EventCard = ({event, onClick, stylized}) => {
                 <img className="w-[65%] h-fit" src={circuitImgSrc} alt={`${event.location} circuit map`} />
             </div>
             
-        </div>
+        </Link>
     )
 };
 

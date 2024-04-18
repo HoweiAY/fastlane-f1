@@ -74,8 +74,7 @@ const Schedule = () => {
                         {fullSchedule.map((event) => 
                             <EventCard 
                                 key={event.dateFormatted}
-                                event={event} 
-                                onClick={(event) => handleSelectEvent(event)}
+                                event={event}
                                 stylized={true}
                             />
                         )}

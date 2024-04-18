@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { IconContext } from "react-icons";
 import { FaGithub } from "react-icons/fa";
 
@@ -9,14 +10,15 @@ const Footer = () => {
             <p>
                 <span className="font-f1-b">FastLane</span> by HoweiAY
             </p>
-            <button 
+            <Link 
                 className="mx-6"
-                onClick={() => window.open(githubLink, "_blank")}
+                to={githubLink}
+                target="_blank"
             >
                 <IconContext.Provider value={{ style: { height: "2rem", width:"2rem", margin: "auto", color: "#FFF" }}} >
                     <FaGithub />
                 </IconContext.Provider>
-            </button>
+            </Link>
         </footer>
     )
 };

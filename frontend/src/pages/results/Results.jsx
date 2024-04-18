@@ -22,7 +22,6 @@ const Results = () => {
 
     useEffect(() => {
         document.title = "Results - FastLane";
-        window.scrollTo(0, 0);
     }, []);
 
     useEffect(() => {
