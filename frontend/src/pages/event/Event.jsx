@@ -21,7 +21,7 @@ const Event = () => {
 
     useEffect(() => {
         const eventRound = round;
-        document.title = `${location} ${season} Schedule - FastLane`;
+        document.title = `${location.replace(/_/g, " ")} ${season} Schedule - FastLane`;
         const loadEvent = async (year, round) => {
             const event = await getEventInfo(year, round);
             if (!event.error) {

@@ -14,6 +14,8 @@ const Schedule = () => {
 
     const [season, setSeason] = useState(new Date().getUTCFullYear());
     const [fullSchedule, setFullSchedule] = useState(null);
+    const [scheduleError, setScheduleError] = useState(false);
+    const [reloadSchedule, setReloadSchedule] = useState(false);
 
     useEffect(() => {
         document.title = "Schedule - FastLane";
@@ -27,19 +29,20 @@ const Schedule = () => {
             if (!schedule.error) {
                 setFullSchedule(schedule.events);
             }
+            else setScheduleError(true);
         };
         loadSchedule(season);
-    }, [season]);
+    }, [season, reloadSchedule]);
 
     const handleChangeSeason = (year) => {
+        setScheduleError(false);
         setSeason(year);
     };
 
-    const handleSelectEvent = (event) => {
-        const round = event.round;
-        const location = event.location.replace(/ /g, '_');
-        navigate(`/event/${season}/${round}/${location}`);
-    }
+    const handleReloadSchedule = () => {
+        setReloadSchedule(reload => !reload);
+        setScheduleError(false);
+    };
 
     return (
         <main className="mb-10 min-h-[90vh]">
@@ -65,11 +68,7 @@ const Schedule = () => {
                     </ul>
                 </aside>
 
-                {!fullSchedule ? (
-                    <div className="max-md:self-center flex flex-row justify-center items-center w-[70%] h-100 max-md:h-300 max-md:w-[65%] min-w-80 ms-4 me-[10%] max-lg:mt-4">
-                        <LoadingSpinner width={"100"} height={"100"} color={"#DC2626"} />
-                    </div>
-                ) : (
+                {fullSchedule ? (
                     <div className="max-md:self-center grid grid-cols-3 max-md:grid-cols-1 max-lg:grid-cols-2 items-stretch gap-5 w-[70%] max-md:w-[65%] min-w-80 ms-4 me-[10%] max-md:mx-20 max-lg:me-24">
                         {fullSchedule.map((event) => 
                             <EventCard 
@@ -80,7 +79,27 @@ const Schedule = () => {
                             />
                         )}
                     </div>
+                ) : scheduleError ? (
+                    <div className="max-md:self-center flex flex-col justify-center items-center md:mx-10 max-md:my-6 w-[75%] h-100 max-md:w-[85%] max-md:h-60 min-w-80 text-center">
+                        <h2 className="font-f1-b text-5xl max-md:text-3xl max-lg:text-4xl">
+                            Error loading schedule
+                        </h2>
+                        <p className="mt-3 max-md:mt-2 max-md:text-sm whitespace-break-spaces">
+                            An error has occurred while loading the season schedule.
+                        </p>
+                        <button 
+                            className="border border-red-600 rounded-md bg-red-600 my-4 max-md:my-3 px-3 py-1 text-white text-lg max-md:text-base"
+                            onClick={() => handleReloadSchedule()}
+                        >
+                            Retry
+                        </button>
+                    </div>
+                ) : (
+                    <div className="max-md:self-center flex flex-row justify-center items-center w-[70%] h-100 max-md:h-300 max-md:w-[65%] min-w-80 ms-4 me-[10%] max-lg:mt-4">
+                        <LoadingSpinner width={"100"} height={"100"} color={"#DC2626"} />
+                    </div>
                 )}
+                    
             </div>
         </main>
     );
