@@ -3,11 +3,15 @@ import { Link } from "react-router-dom";
 
 import { countryCodes } from "../../utils/country_code";
 
-const EventCard = ({event, stylized}) => {
+const EventCard = ({event, year, stylized}) => {
     const [season, setSeason] = useState(new Date().getUTCFullYear());
     const [countryCode, setCountryCode] = useState("xx");
     const [circuitImgSrc, setCircuitImgSrc] = useState("");
     
+    useEffect(() => {
+        if (year) setSeason(year);
+    }, [year]);
+
     useEffect(() => {
         setCountryCode(countryCodes[event.country]?.toLowerCase() || "xx");
         switch (event.country) {

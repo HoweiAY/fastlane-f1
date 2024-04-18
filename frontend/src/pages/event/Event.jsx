@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import SessionSchedule from "../../components/event/SessionSchedule";
 import CircuitInfo from "../../components/circuit/CircuitInfo";
@@ -80,8 +80,14 @@ const Event = () => {
                 </header>
                 
                 <div className="flex flex-col justify-center items-around w-full">
-                    <header className="mx-[10%] mt-5 max-md:mx-10">
-                        <h1 className="mt-4 font-f1-bl text-5xl max-md:text-4xl text-start">
+                    <Link
+                        className="max-md:hidden border-b-2 border-blue-400 mx-[10%] mt-5 mb-3 px-1 max-md:mx-10 w-fit max-md:text-sm text-blue-400"
+                        to="/schedule"
+                    >
+                        {"<<"} Back to schedule
+                    </Link>
+                    <header className="mx-[10%] max-md:mx-10">
+                        <h1 className="mt-4 max-md:mt-10 font-f1-bl text-5xl max-md:text-4xl text-start">
                             {event.format === "conventional" ? "RACE WEEKEND " : event.format === "testing" ? "TESTING" : "SPRINT WEEKEND"}
                         </h1>
                         <h2 className="md:mt-2 text-2xl max-md:text-lg">Event schedule</h2>
@@ -103,6 +109,7 @@ const Event = () => {
                             }
 
                             {event.sessions.sprintShootout && <SessionSchedule session={event.sessions.sprintShootout} sessionName={"Sprint Shootout"} />}
+                            {event.sessions.sprintQualifying && <SessionSchedule session={event.sessions.sprintQualifying} sessionName={"Sprint Qualifying"} />}
                             {event.sessions.sprint && <SessionSchedule session={event.sessions.sprint} sessionName={"Sprint"} />}
                             
                             {event.sessions.qualifying 
@@ -120,8 +127,14 @@ const Event = () => {
                     </section>
                 </div>
 
-                <div className="lg:hidden flex flex-row justify-center items-center px-5 pb-5 bg-gray-100">
+                <div className="lg:hidden flex flex-col justify-center items-center px-5 md:pb-5 bg-gray-100">
                     <CircuitInfo circuitInfo={event.circuitInfo} circuitImgSrc={circuitImgSrc} />
+                    <Link
+                        className="md:hidden self-start border-b-2 border-blue-400 mx-6 mb-5 px-1 w-fit text-sm text-blue-400"
+                        to="/schedule"
+                    >
+                        {"<<"} Back to schedule
+                    </Link>
                 </div>
             </main>
         ) : ( 

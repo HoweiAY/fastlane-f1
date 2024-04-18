@@ -74,6 +74,7 @@ const Schedule = () => {
                         {fullSchedule.map((event) => 
                             <EventCard 
                                 key={event.dateFormatted}
+                                year={season}
                                 event={event}
                                 stylized={true}
                             />

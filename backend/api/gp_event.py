@@ -89,7 +89,6 @@ def getEventInfo(year=None, round=1):
                 sessions["sprintShootout"] = sessionInfo(shootoutSession)
             elif event.EventFormat == "sprint_qualifying":
                 sprintQualifyingSession = event.get_sprint_qualifying()
-                sessions["sprintShootout"] = sessionInfo(sprintQualifyingSession)
                 sessions["sprintQualifying"] = sessionInfo(sprintQualifyingSession)
             elif event.EventFormat == "sprint":
                 sprintSession = event.get_sprint()

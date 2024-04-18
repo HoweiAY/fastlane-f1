@@ -3,7 +3,7 @@ import { MdArrowOutward } from "react-icons/md";
 
 const CircuitInfo = ({circuitInfo, circuitImgSrc}) => {
     return (
-        <div className="flex-auto flex flex-col justify-center items-start w-full mt-2 mb-4 max-lg:mx-4">
+        <div className="flex-auto flex flex-col justify-center items-start w-full mt-2 mb-4 max-lg:mx-4 max-md:mb-1">
             <h2 className="place-self-start px-1 py-2 font-f1-b text-3xl max-md:text-xl">Track Details</h2>
             <div className="flex flex-col max-md:flex-col max-lg:flex-row justify-around items-center border-t-4 border-gray-700 w-full p-4">
                 <div className="lg:border border-slate-300 rounded-lg max-md:w-full max-lg:w-[50%] p-2 lg:bg-gray-50">
