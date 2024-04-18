@@ -14,7 +14,7 @@ colorama==0.4.6
 contourpy==1.2.0
 cycler==0.12.1
 exceptiongroup==1.2.0
-fastf1==3.3.0
+fastf1==3.3.4
 Flask==3.0.2
 Flask-Cors==4.0.0
 fonttools==4.49.0
