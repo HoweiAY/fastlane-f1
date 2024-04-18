@@ -173,7 +173,7 @@ const Home = () => {
                     <div className="md:hidden w-[95%]">
                         <ScheduleDescription />
                     </div>
-                    <div className="w-1/2 max-w-[30rem] max-sm:w-4/5 max-md:w-8/12 max-lg:w-[45%] mx-8 px-8">
+                    <div className="border rounded-xl bg-gray-50 w-1/2 max-w-[30rem] max-sm:w-4/5 max-md:w-8/12 max-lg:w-[45%] mx-8 px-8">
                         {fullSchedule && <EventCarousel fullSchedule={fullSchedule} round={round} />}
                         {!fullSchedule && <LoadingSpinner width={"100"} height={"100"} color={"#DC2626"} />}
                     </div>

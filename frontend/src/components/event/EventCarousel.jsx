@@ -31,8 +31,6 @@ const PrevEventArrow = (props) => {
 }
 
 const EventCarousel = ({fullSchedule, round}) => {
-    const [season, setSeason] = useState(new Date().getUTCFullYear());
-
     const settings = {
         arrows: true,
         dots: false,
