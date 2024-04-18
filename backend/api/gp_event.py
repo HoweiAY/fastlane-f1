@@ -51,6 +51,7 @@ def getEventInfo(year=None, round=1):
             "practice2": None,
             "practice3": None,
             "sprint": None,
+            "sprintQualifying": None,
             "sprintShootout": None,
             "qualifying": None,
             "race": None,
@@ -70,7 +71,7 @@ def getEventInfo(year=None, round=1):
         if not event.is_testing():
             # number of practice sessions based on weekend format
             practiceCount = 3
-            if event.EventFormat == "sprint_shootout":
+            if event.EventFormat == "sprint_shootout" or event.EventFormat == "sprint_qualifying":
                 practiceCount = 1
             elif event.EventFormat == "sprint":
                 practiceCount = 2
@@ -86,6 +87,10 @@ def getEventInfo(year=None, round=1):
             if event.EventFormat == "sprint_shootout":
                 shootoutSession = event.get_sprint_shootout()
                 sessions["sprintShootout"] = sessionInfo(shootoutSession)
+            elif event.EventFormat == "sprint_qualifying":
+                sprintQualifyingSession = event.get_sprint_qualifying()
+                sessions["sprintShootout"] = sessionInfo(sprintQualifyingSession)
+                sessions["sprintQualifying"] = sessionInfo(sprintQualifyingSession)
             elif event.EventFormat == "sprint":
                 sprintSession = event.get_sprint()
                 sessions["sprint"] = sessionInfo(sprintSession)
