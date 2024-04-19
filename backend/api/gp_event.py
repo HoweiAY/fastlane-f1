@@ -10,7 +10,7 @@ event_bp = Blueprint("event", __name__)
 @event_bp.route("/get_event_info", methods=["GET"])
 @event_bp.route("/get_event_info/<year>", methods=["GET"])
 @event_bp.route("/get_event_info/<year>/<round>", methods=["GET"])
-@event_bp.route("/get_event_info/<year>/<round>?includeCircuitInfo=<includeCircuitInfo>", methods=["GET"])
+@event_bp.route("/get_event_info/<year>/<round>/<includeCircuitInfo>", methods=["GET"])
 def getEventInfo(year=None, round=1, includeCircuitInfo=True):
 
     def sessionInfo(session):
@@ -36,6 +36,8 @@ def getEventInfo(year=None, round=1, includeCircuitInfo=True):
     year = int(year)
 
     round = int(round)
+
+    if includeCircuitInfo == "false": includeCircuitInfo = False
 
     gpEvent = {
         "eventName": "",
@@ -103,17 +105,10 @@ def getEventInfo(year=None, round=1, includeCircuitInfo=True):
         gpEvent["sessions"] = sessions
 
         # uses the Ergast API to get cicuit-related information, may be replaced after deprecation
-        if includeCircuitInfo:
-            try:
+        try:
+            if includeCircuitInfo: 
                 gpEvent["circuitInfo"] = getCircuitInfo(year, round)
-            except:
-                circuitName = event.Location
-                Location = {"locality": event.Country}
-                gpEvent["circuitInfo"] = {
-                    "circuitName": circuitName,
-                    "Location": Location,
-                }
-        else:
+        except:
             circuitName = event.Location
             Location = {"locality": event.Country}
             gpEvent["circuitInfo"] = {
