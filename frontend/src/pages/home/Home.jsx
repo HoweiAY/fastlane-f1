@@ -132,6 +132,7 @@ const Home = () => {
 
     useEffect(() => {
         document.title = "FastLane";
+        window.scrollTo(0, 0);
     }, []);
     
     

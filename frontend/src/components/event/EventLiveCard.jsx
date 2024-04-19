@@ -27,15 +27,15 @@ const EventLiveCard = ({fullSchedule}) => {
                         <h3 className="px-2 pt-2 pb-1 font-f1-b text-xl max-md:text-lg">
                             Live Event
                         </h3>
-                        <div className="border-t-4 border-s-4 border-white rounded-tl-lg p-2 me-2">
+                        <div className="border-t-4 border-s-4 border-white rounded-tl-lg px-2 pt-2 pb-4 me-2">
                             <h3 className="ps-1 pt-2 pb-1 max-md:pt-0 max-lg:pt-1 font-f1-w text-xl max-md:text-base max-lg:text-lg">
                                 ROUND {event.round}
                             </h3>
-                            <p className="border-t-2 ps-1 pe-3 pt-1 w-fit text-lg max-md:text-sm max-lg:text-base">
+                            <p className="border-t-2 ps-1 pe-3 pt-1 pb-3 w-fit text-lg max-md:text-sm max-lg:text-base">
                                 {event.eventName}
                             </p>
                             <Link 
-                                className="border border-red-600 rounded-lg mx-1 my-3 max-md:mb-1 p-2 text-white max-md:text-sm bg-red-600"
+                                className="border border-red-600 rounded-lg mx-1 mt-4 mb-3 max-md:mt-2 p-2 text-white max-md:text-sm bg-red-600"
                                 to="/live-timing"
                             >
                                 Live Timing {">>"}

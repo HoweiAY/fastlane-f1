@@ -22,6 +22,7 @@ const LiveTiming = () => {
         "practice3": "Practice 3",
         "sprint": "Sprint",
         "sprintShootout": "Sprint Shootout",
+        "sprintQualifying": "Sprint Qualifying",
         "qualifying": "Qualifying",
         "race": "Race",
         "testing": "Testing",
@@ -70,7 +71,7 @@ const LiveTiming = () => {
 
     useEffect(() => {
         const loadEvent = async (year, round) => {
-            const event = await getEventInfo(year, round);
+            const event = await getEventInfo(year, round, false);
             if (!event.error) {
                 setEvent(event);
                 setRound(round);
@@ -168,7 +169,7 @@ const LiveTiming = () => {
 
         loadLiveDriverData(sessionType);
         if (!driverDataInterval) {
-            const driverDataID = setInterval(loadLiveDriverData, 35000, sessionType);
+            const driverDataID = setInterval(loadLiveDriverData, 20000, sessionType);
             setDriverDataInterval(driverDataID);
         }
 
@@ -222,7 +223,7 @@ const LiveTiming = () => {
                                     {sessions[sessionType]}
                                 </h2>
                                 <section className="border-t-4 border-e-4 border-white rounded-tr-xl p-2 overflow-scroll">
-                                <div className={`${!flagData || flagData === "GREEN" || flagData === "CLEAR" ? "h-0" : "h-9"} ${flagData && flagBackgroundColors[flagData]} rounded-xl max-md:rounded-lg my-3 mx-auto p-auto w-[95%] min-w-10 overflow-hidden transition-all duration-500`}>
+                                <div className={`${!flagData || flagData === "GREEN" || flagData === "CLEAR" ? "h-0" : "h-9"} ${flagData && flagBackgroundColors[flagData]} rounded-xl max-md:rounded-lg my-3 mx-auto p-auto w-[95%] min-w-10 font-f1-b overflow-hidden transition-all duration-500`}>
                                     {safetyCarData && (safetyCarData.deployed && flagData !== "RED") ? 
                                         <p className="p-2 text-sm text-center">{safetyCarData.message}</p> 
                                         : 
