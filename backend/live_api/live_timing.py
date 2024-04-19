@@ -231,7 +231,7 @@ def getLiveFlag(session="race"):
             await asyncio.sleep(1)
     
     def getLiveData(session= "race"):
-        isQualifying = (session == "qualifying" or session == "sprintShootout")
+        isQualifying = (session == "qualifying" or session == "sprintShootout" or session == "sprintQualifying")
         asyncio.run(getLiveFlagAsync(isQualifying))
 
     try:
