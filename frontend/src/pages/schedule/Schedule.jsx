@@ -56,7 +56,7 @@ const Schedule = () => {
             <div className="flex flex-row max-md:flex-col justify-around max-md:justify-center md:mt-4">
                 <aside className="flex-auto justify-end w-auto max-md:min-w-72 ps-[5%] max-md:px-[25%] text-right">
                     <h3 className="md:self-end border-b-2 border-e-2 rounded-br-md border-red-600 px-3 py-1 my-3 max-md:mt-1 font-f1-bl text-red-600 text-2xl max-lg:text-xl">Year</h3>
-                    <ul className="h-80 max-md:h-40 border-e-2 ps-1 me-1 max-md:mb-3 border-gray-800 font-f1-r text-lg max-lg:text-base text-gray-800 overflow-scroll">
+                    <ul className="h-80 max-md:h-40 border-e-2 ps-1 me-1 max-md:mb-3 border-gray-800 font-f1-r text-lg max-lg:text-base text-gray-800 overflow-y-scroll overflow-x-hidden">
                         {seasons.map((year) => (
                             <li 
                                 key={year} 
@@ -72,7 +72,7 @@ const Schedule = () => {
                     <div className="max-md:self-center grid grid-cols-3 max-md:grid-cols-1 max-lg:grid-cols-2 items-stretch gap-5 w-[70%] max-md:w-[65%] min-w-80 ms-4 me-[10%] max-md:mx-20 max-lg:me-24">
                         {fullSchedule.map((event) => 
                             <EventCard 
-                                key={event.dateFormatted}
+                                key={event.eventName}
                                 year={season}
                                 event={event}
                                 stylized={true}

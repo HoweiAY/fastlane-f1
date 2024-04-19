@@ -104,7 +104,7 @@ const Results = () => {
             <div className="flex flex-row max-md:flex-col justify-around max-md:justify-center mt-4">
                 <aside className="flex-auto justify-end w-auto max-md:min-w-72 ps-[5%] max-md:px-[25%] text-right">
                     <h3 className="md:self-end border-b-2 border-e-2 rounded-br-md border-red-600 px-3 py-1 my-3 max-md:mt-1 font-f1-bl text-red-600 text-2xl max-lg:text-xl">Year</h3>
-                    <ul className="h-80 max-md:h-40 border-e-2 ps-1 me-1 max-md:mb-3 border-gray-800 font-f1-r text-lg max-lg:text-base text-gray-800 overflow-scroll">
+                    <ul className="h-80 max-md:h-40 border-e-2 ps-1 me-1 max-md:mb-3 border-gray-800 font-f1-r text-lg max-lg:text-base text-gray-800 overflow-y-scroll overflow-x-hidden">
                         {seasons.map((year) => (
                             <li 
                                 key={year} 
@@ -124,7 +124,7 @@ const Results = () => {
                         <p className="mx-10 pt-5 max-md:mx-5 max-md:py-3 text-gray-500 text-sm max-md:text-xs">
                             Switch between Drivers and Constructors to view results for either championship.
                         </p>
-                        <div className="mx-10 my-4 pb-2 max-md:mx-auto max-md:my-2 w-[90%] min-w-80 overflow-scroll">
+                        <div className="mx-10 my-4 pb-2 max-md:mx-auto max-md:my-2 w-[90%] min-w-80 overflow-y-auto no-scrollbar">
                             <div className="flex flex-row justify-start items-center">
                                 {championshipResultTabs.map((resultTab) => (
                                     <button
@@ -136,7 +136,7 @@ const Results = () => {
                                     >{resultTab}</button>
                                 ))}
                             </div>
-                            <div className="rounded-tr-sm rounded-b-sm pt-2 pb-3 px-2 min-h-60 max-md:min-h-40 bg-slate-100 whitespace-nowrap overflow-scroll">
+                            <div className="rounded-tr-sm rounded-b-sm pt-2 pb-3 px-2 min-h-60 max-md:min-h-40 bg-slate-100 whitespace-nowrap overflow-x-scroll">
                                 {displayChampionshipResultTab(championshipResultTab)}
                             </div>
                         </div>

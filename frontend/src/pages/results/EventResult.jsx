@@ -160,7 +160,7 @@ const EventResult = () => {
                     <p className="mx-1 pt-5 max-md:py-3 text-gray-500 text-sm max-md:text-xs">
                         Select Qualifying or Race to view results for that session.
                     </p>
-                    <div className="mx-1 my-4 max-md:mx-auto max-md:my-2 md:w-[95%] min-w-80 overflow-scroll">
+                    <div className="mx-1 my-4 max-md:mx-auto max-md:my-2 md:w-[95%] min-w-80 overflow-y-auto no-scrollbar">
                         <div className="flex flex-row justify-start items-center">
                             {sessionTabs.map((session) => (
                                 <button
@@ -172,7 +172,7 @@ const EventResult = () => {
                                 >{session}</button>
                             ))}
                         </div>
-                        <div className="rounded-tr-sm rounded-b-sm pt-2 pb-3 px-2 min-h-60 max-md:min-h-40 bg-slate-100 whitespace-nowrap overflow-scroll">
+                        <div className="rounded-tr-sm rounded-b-sm pt-2 pb-3 px-2 min-h-60 max-md:min-h-40 bg-slate-100 whitespace-nowrap overflow-x-scroll">
                             {sessionFinished ? 
                                 displaySessionTab(sessionTab)
                                 : (
