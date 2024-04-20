@@ -16,7 +16,7 @@ const TopNavBar = () => {
                 <h1 className="font-f1-b text-2xl">FastLane</h1>
             </div>
             
-            <nav className="flex flex-row max-md:flex-col flex-auto justify-center md:w-full max-md:w-[1fr] h-full lg:px-10 lg:mx-10 max-lg:px-5 max-md:pb-5 whitespace-nowrap">
+            <nav className="flex flex-row max-md:flex-col flex-auto justify-center md:w-full md:min-w-[50%] max-md:w-[1fr] h-full lg:px-10 lg:mx-10 max-lg:px-5 max-md:pb-5 whitespace-nowrap">
                 {pages.map((page, index) => (
                     <Link 
                         key={index}

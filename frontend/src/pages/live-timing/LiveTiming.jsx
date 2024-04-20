@@ -222,7 +222,7 @@ const LiveTiming = () => {
                                 <h2 className="mt-16 mb-2 max-md:mt-10 ps-2 max-md:ps-1 w-[90%] font-f1-b text-4xl max-md:text-2xl max-lg:text-3xl">
                                     {sessions[sessionType]}
                                 </h2>
-                                <section className="border-t-4 border-e-4 border-white rounded-tr-xl p-2 overflow-scroll">
+                                <section className="border-t-4 border-e-4 border-white rounded-tr-xl p-2 overflow-x-scroll">
                                 <div className={`${!flagData || flagData === "GREEN" || flagData === "CLEAR" ? "h-0" : "h-9"} ${flagData && flagBackgroundColors[flagData]} rounded-xl max-md:rounded-lg my-3 mx-auto p-auto w-[95%] min-w-10 font-f1-b overflow-hidden transition-all duration-500`}>
                                     {safetyCarData && (safetyCarData.deployed && flagData !== "RED") ? 
                                         <p className="p-2 text-sm text-center">{safetyCarData.message}</p> 

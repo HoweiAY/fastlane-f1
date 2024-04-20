@@ -64,7 +64,7 @@ const LiveTimingTable = ({driverData, sessionType}) => {
 
     return (
         driverData ? (
-            <table className="table-fixed m-auto w-[95%] min-w-[70rem] text-left">
+            <table className="table-fixed m-auto w-[95%] min-w-[70rem] text-left overflow-scroll">
                 <thead
                     key="table_head"
                     className="font-f1-b text-sm max-md:text-xs"
